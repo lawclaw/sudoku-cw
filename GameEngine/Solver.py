@@ -1,11 +1,12 @@
 # Brute force solver
 # TODO: Bruteforce solver
 
-def find_empty_square(board):
+def find_empty_square(current_board):
     for r in range(9):
         for c in range(9):
-            if board[r][c] == 0:
+            if current_board[r][c] == 0:
                 return r, c
+
     return None, None
 
 
