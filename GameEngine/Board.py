@@ -4,10 +4,10 @@ class Board:
 
     def __init__(self, board = None):
         if board is None:
-            pass
+            self.board = [[0 for i in range(9)] for j in range(9)]
         else:
-            pass
+            self.board = board
 
     def print_board(self):
-        pass
-    
+        for row in self.board:
+            print(row)
