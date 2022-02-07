@@ -6,16 +6,33 @@ def clear_screen():  # https://stackoverflow.com/a/50560686
     print("\033[H\033[J", end="")
 
 
-def print_board(board):
-    paint_print("g", f"{'  '.join(str(x) for x in range(0, 9)).center(34)}", "\n")
-    print(f"{'-' * 27}".center(34))
-    for i, row in enumerate(board):
-        paint_print("g", f"{i} ", "")
-        print("|", f"{str(row)[1:-1]}", "|", end="")
-        paint_print("g", f" {i}", "\n")
+def print_board(board: Board):
+    # Indices
+    paint_print("g", f"{' '.join(str(x) for x in range(0, 9)).center(25)}", "\n")
+    print(f"{'-' * 19}".center(25))
 
-    print(f"{'-' * 27}".center(34))
-    paint_print("g", f"{'  '.join(str(x) for x in range(0, 9)).center(34)}", "\n")
+    # Values
+    # for i, row in enumerate(board.current_state):
+    #     paint_print("g", f"{i} ", "")
+    #     paint_print("y", f"{str(row)[1:-1]}", "")
+    #     print(" |", end="")
+    #     paint_print("g", f" {i}", "\n")
+
+    # Colored Values
+    for row in range(9):
+        paint_print("g", f"{row} ", "")
+        print("| ", end="")
+        for col in range(9):
+            if board.original_state[row][col] == 0:
+                paint_print("y", f"{str(board.current_state[row][col])}", " ")
+            else:
+                print(board.current_state[row][col], end=" ")
+        print("|", end="")
+        paint_print("g", f" {row}", "\n")
+
+    # Indices
+    print(f"{'-' * 19}".center(25))
+    paint_print("g", f"{' '.join(str(i) for i in range(0, 9)).center(25)}", "\n")
 
     print()
 
@@ -59,14 +76,17 @@ class Game:
     def startGame(self, current_board):
         while True:
             clear_screen()
-            print_board(current_board.current_state)
+            print_board(current_board)
             print()
             try:
                 x, y, v = input("Enter x, y coordinates and desired value [1-9] separated by comma: ").split(',')
                 if not 10 > int(v) >= 0:
                     input("Invalid value...(Press any key to try again)\n")
                     continue
-                current_board.current_state[int(y)][int(x)] = int(v)
+                if current_board.original_state[int(x)][int(y)] != 0:
+                    input("Immutable square...(Press any key to try again)\n")
+                    continue
+                current_board.current_state[int(x)][int(y)] = int(v)
             except IndexError:
                 input("Invalid coordinates...(Press any key to try again)\n")
             except ValueError:
