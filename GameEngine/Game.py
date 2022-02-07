@@ -57,17 +57,17 @@ class Game:
                     return int(choice)
 
     def startGame(self, current_board):
-        clear_screen()
         while True:
-            print_board(current_board.board)
+            clear_screen()
+            print_board(current_board.current_state)
             print()
-            x, y, v = input("Enter x, y coordinates and desired value [1-9] separated by comma: ").split(',')
-            print("-" * 27)
-            if not (9 > int(y) >= 0 and 9 > int(x) >= 0):
-                print("Invalid square coordinate")
-                continue
-            if not 10 > int(v) >= 0:
-                print("Invalid value")
-                continue
-            current_board.board[int(y)][int(x)] = int(v)
-
+            try:
+                x, y, v = input("Enter x, y coordinates and desired value [1-9] separated by comma: ").split(',')
+                if not 10 > int(v) >= 0:
+                    input("Invalid value...(Press any key to try again)\n")
+                    continue
+                current_board.current_state[int(y)][int(x)] = int(v)
+            except IndexError:
+                input("Invalid coordinates...(Press any key to try again)\n")
+            except ValueError:
+                input("Invalid input...(Press any key to try again)\n")
