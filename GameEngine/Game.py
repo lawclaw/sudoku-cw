@@ -8,7 +8,7 @@ def clear_screen():  # https://stackoverflow.com/a/50560686
 
 def print_board(board: Board):
     # Indices
-    paint_print("g", f"{' '.join(str(x) for x in range(0, 9)).center(25)}", "\n")
+    paint_print("g", f"{' '.join(str(i) for i in range(0, 9)).center(25)}", "\n")
     print(f"{'-' * 19}".center(25))
 
     # Values
