@@ -1,9 +1,23 @@
 from GameEngine.Board import Board
+from GameEngine.TextColors import paint_print
 import random
 
 def clear_screen():  # https://stackoverflow.com/a/50560686
     print("\033[H\033[J", end="")
 
+
+def print_board(board):
+    paint_print("g", f"{'  '.join(str(x) for x in range(0, 9)).center(34)}", "\n")
+    print(f"{'-' * 27}".center(34))
+    for i, row in enumerate(board):
+        paint_print("g", f"{i} ", "")
+        print("|", f"{str(row)[1:-1]}", "|", end="")
+        paint_print("g", f" {i}", "\n")
+
+    print(f"{'-' * 27}".center(34))
+    paint_print("g", f"{'  '.join(str(x) for x in range(0, 9)).center(34)}", "\n")
+
+    print()
 
 class Game:
     def __init__(self):
@@ -20,7 +34,8 @@ class Game:
     def menu(self):
         while True:
             #clear_screen()
-            print("""
+
+            paint_print("r", """
   .o       .o8                        o.         .o8            oooo                    
  .8'      "888                        `8.       "888            `888                    
 .8'   .oooo888   .oooo.   ooo. .oo.    `8.  .oooo888   .ooooo.   888  oooo  oooo  oooo  
@@ -28,8 +43,7 @@ class Game:
 88   888   888   .oP"888   888   888    88 888   888  888   888  888888.     888   888  
 `8.  888   888  d8(  888   888   888   .8' 888   888  888   888  888 `88b.   888   888  
  `8. `Y8bod88P" `Y888""8o o888o o888o .8'  `Y8bod88P" `Y8bod8P' o888o o888o  `V88V"V8P' 
-  `"                                  "'                                               """)
-            print()
+  `"                                  "'                                               """, "\n")
             print("Author: lawclaw")
             print("-" * 14)
             print("| Easy. 1")
@@ -45,8 +59,9 @@ class Game:
     def startGame(self, current_board):
         clear_screen()
         while True:
-            current_board.print_board()
-            x, y, v = input("Enter x, y and desired value [1-9] separated by comma: ").split(',')
+            print_board(current_board.board)
+            print()
+            x, y, v = input("Enter x, y coordinates and desired value [1-9] separated by comma: ").split(',')
             print("-" * 27)
             if not (9 > int(y) >= 0 and 9 > int(x) >= 0):
                 print("Invalid square coordinate")

@@ -39,10 +39,3 @@ class Board:
 
             removals += 1
 
-    def print_board(self):
-        for i, row in enumerate(self.board):
-            print(f"{str(row)[1:-1]} | {i}")
-        print("-" * 27)
-        for i in range(9):
-            print(f"{i}  ", end="")
-        print()
