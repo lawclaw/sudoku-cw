@@ -13,9 +13,8 @@ class Board:
     def __init__(self, difficulty):
         # TODO: Generate puzzle
         self.current_state = [[0 for i in range(self.__size)] for j in range(self.__size - 1)]  # Empty board
-        self.current_state.append([*range(1, 10)])
-        random.shuffle(self.current_state[-1])
-        self.current_state[0], self.current_state[-1] = self.current_state[-1], self.current_state[0]
+        self.current_state.insert(0, [*range(1, 10)])
+        random.shuffle(self.current_state[0])
         Solver.brute_solve(self.current_state)  # 123 board
 
         # Shuffles the rows within each 3x3 borders 3 times
