@@ -1,5 +1,6 @@
 from GameEngine.Board import Board
 from GameEngine.TextColors import paint_print
+import os
 
 
 def clear_screen():  # https://stackoverflow.com/a/50560686
@@ -8,33 +9,22 @@ def clear_screen():  # https://stackoverflow.com/a/50560686
 
 def print_board(board: Board):
     # Indices
-    paint_print("g", f"{' '.join(str(i) for i in range(0, 9)).center(25)}", "\n")
-    print(f"{'—' * 19}".center(25))
-
-    # Values
-    # for i, row in enumerate(board.current_state):
-    #     paint_print("g", f"{i} ", "")
-    #     paint_print("y", f"{str(row)[1:-1]}", "")
-    #     print(" |", end="")
-    #     paint_print("g", f" {i}", "\n")
+    to_print = [' '.join(str(i) for i in range(0, 9)), '—' * 19]
 
     # Colored Values
-    for row in range(9):
-        paint_print("g", f"{row} ", "")
-        print("| ", end="")
-        for col in range(9):
-            if board.original_state[row][col] == 0:
-                paint_print("y", f"{str(board.current_state[row][col])}", " ")
-            else:
-                print(board.current_state[row][col], end=" ")
-        print("|", end="")
-        paint_print("g", f" {row}", "\n")
+    for row_num, row in enumerate(board.current_state):
+        to_print.append(f"{row_num} | {' '.join([str(d) for d in row])} | {row_num}")
 
     # Indices
-    print(f"{'—' * 19}".center(25))
-    paint_print("g", f"{' '.join(str(i) for i in range(0, 9)).center(25)}", "\n")
+    to_print.append('—' * 19)
+    to_print.append(' '.join(str(i) for i in range(0, 9)))
 
-    print()
+    # Centering
+    max_len = os.get_terminal_size().columns  # https://stackoverflow.com/a/33595028
+    for i, line in enumerate(to_print):
+        to_print[i] = to_print[i].center(max_len)
+
+    print(*to_print, sep="\n")
 
 
 class Game:
@@ -51,24 +41,26 @@ class Game:
 
     def menu(self):
         while True:
-            # clear_screen()
+            clear_screen()
 
-            paint_print("r", """
-  .o       .o8                        o.         .o8            oooo                    
- .8'      "888                        `8.       "888            `888                    
-.8'   .oooo888   .oooo.   ooo. .oo.    `8.  .oooo888   .ooooo.   888  oooo  oooo  oooo  
-88   d88' `888  `P  )88b  `888P"Y88b    88 d88' `888  d88' `88b  888 .8P'   `888  `888  
-88   888   888   .oP"888   888   888    88 888   888  888   888  888888.     888   888  
-`8.  888   888  d8(  888   888   888   .8' 888   888  888   888  888 `88b.   888   888  
- `8. `Y8bod88P" `Y888""8o o888o o888o .8'  `Y8bod88P" `Y8bod8P' o888o o888o  `V88V"V8P' 
-  `"                                  "'                                               """, "\n")
-            print("Author: lawclaw")
-            print("-" * 14)
-            print("| Easy. 1")
-            print("| Medium. 2")
-            print("| Hard. 3")
-            print("| Quit. 0")
-            print("-" * 14)
+            to_print = [
+                        "(dan)doku",
+                        "Author: lawclaw",
+                        "Easy. 1",
+                        "Medium. 2",
+                        "Hard. 3",
+                        "Quit. 0"
+                        ]
+
+            max_len = len(max(to_print, key=len))
+            to_print.insert(2, "-" * max_len)
+            to_print.insert(-1, "-" * max_len)
+            for i, line in enumerate(to_print):
+                to_print[i] = to_print[i].center(max_len)
+
+            print(*to_print, sep="\n")
+            print()
+
             choice = input("Enter: ")
             if choice.isnumeric():
                 if int(choice) in range(0, 4):
