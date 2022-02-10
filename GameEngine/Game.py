@@ -1,6 +1,6 @@
 from GameEngine.Board import Board
 from GameEngine.TextColors import paint_print
-import random
+
 
 def clear_screen():  # https://stackoverflow.com/a/50560686
     print("\033[H\033[J", end="")
@@ -9,7 +9,7 @@ def clear_screen():  # https://stackoverflow.com/a/50560686
 def print_board(board: Board):
     # Indices
     paint_print("g", f"{' '.join(str(i) for i in range(0, 9)).center(25)}", "\n")
-    print(f"{'-' * 19}".center(25))
+    print(f"{'—' * 19}".center(25))
 
     # Values
     # for i, row in enumerate(board.current_state):
@@ -31,10 +31,11 @@ def print_board(board: Board):
         paint_print("g", f" {row}", "\n")
 
     # Indices
-    print(f"{'-' * 19}".center(25))
+    print(f"{'—' * 19}".center(25))
     paint_print("g", f"{' '.join(str(i) for i in range(0, 9)).center(25)}", "\n")
 
     print()
+
 
 class Game:
     def __init__(self):
@@ -50,7 +51,7 @@ class Game:
 
     def menu(self):
         while True:
-            #clear_screen()
+            # clear_screen()
 
             paint_print("r", """
   .o       .o8                        o.         .o8            oooo                    
@@ -83,10 +84,10 @@ class Game:
                 if not 10 > int(v) >= 0:
                     input("Invalid value...(Press any key to try again)\n")
                     continue
-                if current_board.original_state[int(x)][int(y)] != 0:
+                if current_board.original_state[int(y)][int(x)] != 0:
                     input("Immutable square...(Press any key to try again)\n")
                     continue
-                current_board.current_state[int(x)][int(y)] = int(v)
+                current_board.current_state[int(y)][int(x)] = int(v)
             except IndexError:
                 input("Invalid coordinates...(Press any key to try again)\n")
             except ValueError:

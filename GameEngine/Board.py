@@ -1,10 +1,10 @@
-from GameEngine import Solver
 import random
+from GameEngine import Solver
 from copy import deepcopy
 
 
 class Board:
-    size = 9
+    __size = 9
     current_state = []
     original_state = []
     solved_state = []
@@ -12,10 +12,11 @@ class Board:
 
     def __init__(self, difficulty):
         # TODO: Generate puzzle
-        # No board is given on start:
-        self.current_state = [[0 for i in range(9)] for j in range(9)]  # Empty board
+        self.current_state = [[0 for i in range(self.__size)] for j in range(self.__size - 1)]  # Empty board
+        self.current_state.append([*range(1, 10)])
+        random.shuffle(self.current_state[-1])
+        self.current_state[0], self.current_state[-1] = self.current_state[-1], self.current_state[0]
         Solver.brute_solve(self.current_state)  # 123 board
-        self.solved_state = deepcopy(self.current_state)
 
         # Shuffles the rows within each 3x3 borders 3 times
         # https://blog.forret.com/2006/08/14/a-sudoku-challenge-generator/
@@ -25,6 +26,8 @@ class Board:
             self.current_state[r1], self.current_state[r2] = self.current_state[r2], self.current_state[r1]
             self.current_state[r1 + 3], self.current_state[r2 + 3] = self.current_state[r2 + 3], self.current_state[r1 + 3]
             self.current_state[r1 + 6], self.current_state[r2 + 6] = self.current_state[r2 + 6], self.current_state[r1 + 6]
+
+        self.solved_state = deepcopy(self.current_state)
         # Remove squares
         removals = 0
         if difficulty == 1:
