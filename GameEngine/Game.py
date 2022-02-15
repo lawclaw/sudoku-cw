@@ -1,5 +1,5 @@
 from GameEngine.Board import Board
-from GameEngine.TextColors import paint_print
+from GameEngine.TextColors import paint_string
 import os
 
 
@@ -11,6 +11,7 @@ def center_text(lines=None, width=None):
     # Centering
     if width is None:
         width = os.get_terminal_size().columns  # https://stackoverflow.com/a/33595028
+        width -= 25
     for i in range(len(lines)):
         lines[i] = lines[i].center(width)
     return lines
@@ -20,7 +21,7 @@ def print_board(board: Board):
     # Indices
     to_print = [' '.join(str(i) for i in range(0, 9)), '—' * 19]
 
-    # Colored Values
+    # Values
     for row_num, row in enumerate(board.current_state):
         to_print.append(f"{row_num} | {' '.join([str(d) for d in row])} | {row_num}")
 
@@ -31,7 +32,6 @@ def print_board(board: Board):
     center_text(to_print)
 
     print(*to_print, sep="\n")
-
 
 class Game:
     menu_text = [

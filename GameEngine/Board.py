@@ -11,11 +11,15 @@ class Board:
     max_removals = 60
 
     def __init__(self, difficulty):
-        # TODO: Generate puzzle
+        # Generate 8 empty rows
         self.current_state = [[0 for i in range(self.__size)] for j in range(self.__size - 1)]  # Empty board
+
+        # Generate 1 1-9 shuffled row at top
         self.current_state.insert(0, [*range(1, 10)])
         random.shuffle(self.current_state[0])
-        Solver.brute_solve(self.current_state)  # 123 board
+
+        # Fill the 8 remaining rows by bruteforce
+        Solver.brute_solve(self.current_state)
 
         # Shuffles the rows within each 3x3 borders 3 times
         # https://blog.forret.com/2006/08/14/a-sudoku-challenge-generator/
@@ -45,3 +49,6 @@ class Board:
             removals += 1
 
         self.original_state = deepcopy(self.current_state)
+
+    def is_immutable(self, y, x):
+        return self.original_state[y][x] != 0
