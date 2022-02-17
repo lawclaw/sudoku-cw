@@ -1,3 +1,5 @@
+import copy
+
 from GameEngine.Board import Board
 from GameEngine.TextColors import paint_string
 import os
@@ -11,7 +13,6 @@ def center_text(lines=None, width=None):
     # Centering
     if width is None:
         width = os.get_terminal_size().columns  # https://stackoverflow.com/a/33595028
-        width -= 25
     for i in range(len(lines)):
         lines[i] = lines[i].center(width)
     return lines
@@ -65,15 +66,15 @@ class Game:
     def menu(self, menu_text):
         while True:
             clear_screen()
-
+            to_print = copy.deepcopy(menu_text)
             max_len = len(max(menu_text, key=len))
-            menu_text.insert(0, "-" * max_len)
-            menu_text.insert(3, "-" * max_len)
-            menu_text.append("-" * max_len)
+            to_print.insert(0, "-" * max_len)
+            to_print.insert(3, "-" * max_len)
+            to_print.append("-" * max_len)
 
-            center_text(menu_text, max_len)
+            center_text(to_print, max_len)
 
-            print(*menu_text, sep="\n")
+            print(*to_print, sep="\n")
             print()
 
             choice = input("Enter: ")
