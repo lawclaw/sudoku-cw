@@ -1,9 +1,8 @@
 import copy
+import os
 
 from GameEngine.Board import Board
 from GameEngine.ImmutableSquareError import ImmutableSquareError
-from GameEngine.TextColors import paint_string
-import os
 
 
 def clear_screen():  # https://stackoverflow.com/a/50560686
@@ -55,23 +54,17 @@ def print_menu(menu_text):
     :param menu_text:
     :return:
     """
-    while True:
-        clear_screen()
-        to_print = copy.deepcopy(menu_text)
-        max_len = len(max(menu_text, key=len))
-        to_print.insert(0, "-" * max_len)
-        to_print.insert(3, "-" * max_len)
-        to_print.append("-" * max_len)
+    clear_screen()
+    to_print = copy.deepcopy(menu_text)
+    max_len = len(max(menu_text, key=len))
+    to_print.insert(0, "-" * max_len)
+    to_print.insert(3, "-" * max_len)
+    to_print.append("-" * max_len)
 
-        center_text(to_print, max_len)
+    center_text(to_print, max_len)
 
-        print(*to_print, sep="\n")
-        print()
-
-        choice = input("Enter: ")
-        if choice.isnumeric():
-            if int(choice) in range(0, 4):
-                return int(choice)
+    print(*to_print, sep="\n")
+    print()
 
 
 class Game:
@@ -81,7 +74,7 @@ class Game:
         "Easy. 1",
         "Medium. 2",
         "Hard. 3",
-        "Quit. 0"
+        "Quit. Q"
     ]
 
     game_loop_text = [
@@ -92,27 +85,40 @@ class Game:
     ]
 
     def __init__(self):
+        """
+        Main game
+        """
         while True:
             # Menu
-            choice = print_menu(self.menu_text)
-            if choice == 0:
-                exit()
-            current_board = Board(choice)
+            print_menu(self.menu_text)
+            choice = input("Enter: ")
+            if len(choice) > 1:
+                continue
 
-            # TODO: Playing function
-            self.game_loop(current_board)
+            if choice in "Qq":
+                exit()
+            elif int(choice) in range(0, 4):
+                current_board = Board(choice)
+                self.game_loop(current_board)
 
     def game_loop(self, current_board):
+        """
+        Game loop
+        :param current_board:
+        :return:
+        """
         while not current_board.is_solved():
             print_board(current_board)
             print()
             print(*center_text([self.game_loop_text[0]]))
             print(*center_text([self.game_loop_text[1]]))
+
             try:
-                x, y, v = [int(user_input) for user_input in input("".center(os.get_terminal_size().columns // 2 - 2)).split(",")]
-                current_board.set_square(y,x,v)
+                user_inputs = input("".center(os.get_terminal_size().columns // 2 - 2)).split(',')
+                if user_inputs[0] in "Qq":
+                    break
+                current_board.set_square(user_inputs[0], user_inputs[1], user_inputs[2])
             except ImmutableSquareError:
                 input(*center_text([self.game_loop_text[2]]))
             except ValueError:
                 input(*center_text([self.game_loop_text[3]]))
-

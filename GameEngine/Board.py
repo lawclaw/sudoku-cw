@@ -9,7 +9,7 @@ class Board:
     current_state = []
     original_state = []
     solved_state = []
-    max_removals = 60
+    max_removals = __size ** 2 // 2
 
     def __init__(self, difficulty):
         """
@@ -46,20 +46,18 @@ class Board:
         """
         Remove squares
         """
-        removals = 0
-        if difficulty == 1:
-            self.max_removals -= random.randint(15, 20)
+        if difficulty == 3:
+            self.max_removals += random.randint(15, 25)
         elif difficulty == 2:
-            self.max_removals -= random.randint(5, 10)
+            self.max_removals -= random.randint(10, 15)
 
+        removals = 0
         while removals < self.max_removals:
             y = random.randint(0, self.__size - 1)
             x = random.randint(0, self.__size - 1)
             if self.current_state[y][x] == 0:
                 continue
-
             self.current_state[y][x] = 0
-
             removals += 1
 
         self.original_state = deepcopy(self.current_state)
@@ -82,6 +80,7 @@ class Board:
         return True
 
     def set_square(self, y, x, v):
+        y, x, v = int(y), int(x), int(v)
         for value in [y, x, v]:
             if not self.__size > value >= 0:
                 raise ValueError
