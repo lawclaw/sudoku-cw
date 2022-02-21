@@ -1,16 +1,25 @@
 import copy
 
 from GameEngine.Board import Board
+from GameEngine.ImmutableSquareError import ImmutableSquareError
 from GameEngine.TextColors import paint_string
 import os
 
 
 def clear_screen():  # https://stackoverflow.com/a/50560686
+    """
+    Clears terminal screen
+    """
     print("\033[H\033[J", end="")
 
 
-def center_text(lines=None, width=None):
-    # Centering
+def center_text(lines, width=None):
+    """
+    Center text to terminal screen
+    :param lines: lines to be centered
+    :param width: optional width length
+    :return lines: centered lines
+    """
     if width is None:
         width = os.get_terminal_size().columns  # https://stackoverflow.com/a/33595028
     for i in range(len(lines)):
@@ -19,6 +28,11 @@ def center_text(lines=None, width=None):
 
 
 def print_board(board: Board):
+    clear_screen()
+    """
+    Prints board
+    :param board: Sudoku board
+    """
     # Indices
     to_print = [' '.join(str(i) for i in range(0, 9)), '—' * 19]
 
@@ -34,6 +48,32 @@ def print_board(board: Board):
 
     print(*to_print, sep="\n")
 
+
+def print_menu(menu_text):
+    """
+    Prints game menu
+    :param menu_text:
+    :return:
+    """
+    while True:
+        clear_screen()
+        to_print = copy.deepcopy(menu_text)
+        max_len = len(max(menu_text, key=len))
+        to_print.insert(0, "-" * max_len)
+        to_print.insert(3, "-" * max_len)
+        to_print.append("-" * max_len)
+
+        center_text(to_print, max_len)
+
+        print(*to_print, sep="\n")
+        print()
+
+        choice = input("Enter: ")
+        if choice.isnumeric():
+            if int(choice) in range(0, 4):
+                return int(choice)
+
+
 class Game:
     menu_text = [
         "(dan)doku",
@@ -45,17 +85,16 @@ class Game:
     ]
 
     game_loop_text = [
-        "Enter row, column coordinates and desired value [1-9] separated by comma:",
-        "Invalid value...(Press any key to try again)\n",
-        "Immutable square...(Press any key to try again)\n",
-        "Invalid coordinates...(Press any key to try again)\n",
-        "Invalid input...(Press any key to try again)\n"
+        "Enter x, y coordinates and desired value [1-9] separated by comma:",
+        "Enter Q to quit",
+        "Immutable square...(Press Enter key to try again)\n",
+        "Invalid input...(Press Enter key to try again)\n"
     ]
 
     def __init__(self):
         while True:
             # Menu
-            choice = self.menu(self.menu_text)
+            choice = print_menu(self.menu_text)
             if choice == 0:
                 exit()
             current_board = Board(choice)
@@ -63,41 +102,17 @@ class Game:
             # TODO: Playing function
             self.game_loop(current_board)
 
-    def menu(self, menu_text):
-        while True:
-            clear_screen()
-            to_print = copy.deepcopy(menu_text)
-            max_len = len(max(menu_text, key=len))
-            to_print.insert(0, "-" * max_len)
-            to_print.insert(3, "-" * max_len)
-            to_print.append("-" * max_len)
-
-            center_text(to_print, max_len)
-
-            print(*to_print, sep="\n")
-            print()
-
-            choice = input("Enter: ")
-            if choice.isnumeric():
-                if int(choice) in range(0, 4):
-                    return int(choice)
-
     def game_loop(self, current_board):
-        while True:
-            clear_screen()
+        while not current_board.is_solved():
             print_board(current_board)
             print()
+            print(*center_text([self.game_loop_text[0]]))
+            print(*center_text([self.game_loop_text[1]]))
             try:
-                print(*center_text([self.game_loop_text[0]]))
-                x, y, v = [int(x) for x in input("".center(os.get_terminal_size().columns // 2 - 2)).split(",")]
-                if not 10 > v >= 0:
-                    input(*center_text([self.game_loop_text[1]]))
-                    continue
-                if current_board.original_state[y][x] != 0:
-                    input(*center_text([self.game_loop_text[2]]))
-                    continue
-                current_board.current_state[y][x] = int(v)
-            except IndexError:
-                input(*center_text([self.game_loop_text[3]]))
+                x, y, v = [int(user_input) for user_input in input("".center(os.get_terminal_size().columns // 2 - 2)).split(",")]
+                current_board.set_square(y,x,v)
+            except ImmutableSquareError:
+                input(*center_text([self.game_loop_text[2]]))
             except ValueError:
-                input(*center_text([self.game_loop_text[4]]))
+                input(*center_text([self.game_loop_text[3]]))
+
