@@ -28,11 +28,12 @@ def center_text(lines, width=None):
     return lines
 
 
-def print_board(board: Board):
+def print_board(board: Board, stdscr: curses.wrapper):
     """
     Prints board
     :param board: Sudoku board
     """
+    clear_screen(stdscr)
     # Indices
     to_print = [' '.join(str(i) for i in range(0, 9)), '—' * 19]
 
@@ -44,10 +45,16 @@ def print_board(board: Board):
     to_print.append('—' * 19)
     to_print.append(' '.join(str(i) for i in range(0, 9)))
 
-    center_text(to_print)
+    # Add lines to stdscr
+    for i, line in enumerate(to_print):
+        stdscr.addstr(
+            curses.LINES // 5 + i,
+            curses.COLS // 2 - ((len(line) + 1) // 2),
+            f"{line}\n"
+        )
 
-    print(*to_print, sep="\n")
-
+    # Refresh screen
+    stdscr.refresh()
 
 def print_menu(menu_text, stdscr):
     """
@@ -56,8 +63,12 @@ def print_menu(menu_text, stdscr):
     :return:
     """
     clear_screen(stdscr)
-    for str in menu_text:
-        stdscr.addstr(f"{str}\n")
+    for i, str in enumerate(menu_text):
+        stdscr.addstr(
+            curses.LINES // 3 + i,
+            curses.COLS // 2 - ((len(str) + 1) // 2),
+            f"{str}\n"
+        )
 
 class Game:
     menu_text = [
@@ -84,7 +95,11 @@ class Game:
             curses.echo()
             # Menu
             print_menu(self.menu_text, stdscr)
-            stdscr.addstr("Enter: ")
+
+            stdscr.addstr(
+                22,
+                curses.COLS // 2 - (len("Enter: ") - 1 // 2),
+                "Enter: ")
             stdscr.refresh()
 
             # Input
@@ -97,7 +112,7 @@ class Game:
                 # Check if key is numeric
                 elif key in '123':
                     board = Board(key)
-                    self.game_loop(board)
+                    self.game_loop(board, stdscr)
                     break
                 else:
                     stdscr.addstr("\nInvalid input, press Enter to try again")
@@ -107,26 +122,40 @@ class Game:
 
 
 
-    def game_loop(self, current_board):
+    def game_loop(self, current_board, stdscr):
         """
         Game loop
         :param current_board:
         :return:
         """
         while not current_board.is_solved():
-            print_board(current_board)
-            print()
-            print(*center_text([self.game_loop_text[0]]))
-            print(*center_text([self.game_loop_text[1]]))
+            # Print board
+            print_board(current_board, stdscr)
+            # Print prompt
+            y, x = curses.getsyx()
+
+            stdscr.addstr(
+                y + 1,
+                curses.COLS // 2 - ((len(self.game_loop_text[0]) + 1) // 2),
+                f"{self.game_loop_text[0]}\n")
+
 
             try:
-                user_inputs = input("".center(os.get_terminal_size().columns // 2 - 2)).split(',')
-                if user_inputs[0] == "Q" or user_inputs[0] == "q":
+                raw_inputs = stdscr.getstr(5)
+                str_input = str(raw_inputs, "utf-8").split(',')
+                if str_input[0] == "Q" or str_input[0] == "q":
                     break
-                current_board.set_square(user_inputs[0], user_inputs[1], user_inputs[2])
+                current_board.set_square(str_input[0], str_input[1], str_input[2])
             except ImmutableSquareError:
-                input(*center_text([self.game_loop_text[2]]))
+                stdscr.addstr(self.game_loop_text[2])
+                stdscr.refresh()
+                stdscr.getch()
             except ValueError:
-                input(*center_text([self.game_loop_text[3]]))
+                stdscr.addstr(self.game_loop_text[3])
+                stdscr.refresh()
+                stdscr.getch()
             except IndexError:
-                input(*center_text([self.game_loop_text[3]]))
+                stdscr.addstr(self.game_loop_text[3])
+                stdscr.refresh()
+                stdscr.getch()
+

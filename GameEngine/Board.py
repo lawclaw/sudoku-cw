@@ -79,7 +79,7 @@ class Board:
                 return False;
         return True
 
-    def set_square(self, y, x, v):
+    def set_square(self, x, y, v):
         y, x, v = int(y), int(x), int(v)
         for value in [y, x, v]:
             if not self.__size > value >= 0:
