@@ -11,7 +11,7 @@ class Board:
     solved_state = []
     max_removals = __size ** 2 // 2
 
-    def __init__(self, difficulty):
+    def __init__(self, difficulty: int):
         """
         Constructor: Handles generation of board
         :param difficulty: game difficulty

@@ -1,15 +1,17 @@
 import copy
 import os
+import curses
 
+from curses.textpad import Textbox
 from GameEngine.Board import Board
 from GameEngine.ImmutableSquareError import ImmutableSquareError
 
-
-def clear_screen():  # https://stackoverflow.com/a/50560686
+def clear_screen(stdscr):  # https://stackoverflow.com/a/50560686
     """
     Clears terminal screen
     """
-    print("\033[H\033[J", end="")
+    stdscr.clear()
+    stdscr.refresh()
 
 
 def center_text(lines, width=None):
@@ -27,7 +29,6 @@ def center_text(lines, width=None):
 
 
 def print_board(board: Board):
-    clear_screen()
     """
     Prints board
     :param board: Sudoku board
@@ -48,24 +49,15 @@ def print_board(board: Board):
     print(*to_print, sep="\n")
 
 
-def print_menu(menu_text):
+def print_menu(menu_text, stdscr):
     """
     Prints game menu
     :param menu_text:
     :return:
     """
-    clear_screen()
-    to_print = copy.deepcopy(menu_text)
-    max_len = len(max(menu_text, key=len))
-    to_print.insert(0, "-" * max_len)
-    to_print.insert(3, "-" * max_len)
-    to_print.append("-" * max_len)
-
-    center_text(to_print, max_len)
-
-    print(*to_print, sep="\n")
-    print()
-
+    clear_screen(stdscr)
+    for str in menu_text:
+        stdscr.addstr(f"{str}\n")
 
 class Game:
     menu_text = [
@@ -84,22 +76,36 @@ class Game:
         "Invalid input...(Press Enter key to try again)\n"
     ]
 
-    def __init__(self):
+    def __init__(self, stdscr: curses.wrapper):
         """
         Main game
         """
         while True:
+            curses.echo()
             # Menu
-            print_menu(self.menu_text)
-            choice = input("Enter: ")
-            if len(choice) > 1:
-                continue
+            print_menu(self.menu_text, stdscr)
+            stdscr.addstr("Enter: ")
+            stdscr.refresh()
 
-            if choice in "Qq":
-                exit()
-            elif int(choice) in range(0, 4):
-                current_board = Board(choice)
-                self.game_loop(current_board)
+            # Input
+            key = None
+            while key is None:
+                key = stdscr.getkey()
+                # Exit condition
+                if key in 'Qq':
+                    exit()
+                # Check if key is numeric
+                elif key in '123':
+                    board = Board(key)
+                    self.game_loop(board)
+                    break
+                else:
+                    stdscr.addstr("\nInvalid input, press Enter to try again")
+                    stdscr.refresh()
+                    stdscr.getch()
+
+
+
 
     def game_loop(self, current_board):
         """
@@ -115,10 +121,12 @@ class Game:
 
             try:
                 user_inputs = input("".center(os.get_terminal_size().columns // 2 - 2)).split(',')
-                if user_inputs[0] in "Qq":
+                if user_inputs[0] == "Q" or user_inputs[0] == "q":
                     break
                 current_board.set_square(user_inputs[0], user_inputs[1], user_inputs[2])
             except ImmutableSquareError:
                 input(*center_text([self.game_loop_text[2]]))
             except ValueError:
+                input(*center_text([self.game_loop_text[3]]))
+            except IndexError:
                 input(*center_text([self.game_loop_text[3]]))

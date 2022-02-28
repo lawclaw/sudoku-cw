@@ -1,12 +1,12 @@
 # Application
 from GameEngine.Game import Game
 import platform, os
+from curses import wrapper
 
-def main():
-    if platform.system() == 'Windows':
-        os.system("")
-    g = Game()
+def main(stdscr):
+    g = Game(stdscr)
+
 
 
 if __name__ == '__main__':
-    main()
+    wrapper(main)
