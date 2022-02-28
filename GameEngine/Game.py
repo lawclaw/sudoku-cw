@@ -48,7 +48,7 @@ def print_board(board: Board, stdscr: curses.wrapper):
     # Add lines to stdscr
     for i, line in enumerate(to_print):
         stdscr.addstr(
-            curses.LINES // 5 + i,
+            curses.LINES // 10 + i,
             curses.COLS // 2 - ((len(line) + 1) // 2),
             f"{line}\n"
         )
@@ -97,7 +97,7 @@ class Game:
             print_menu(self.menu_text, stdscr)
 
             stdscr.addstr(
-                22,
+                curses.LINES // 2 + 3,
                 curses.COLS // 2 - (len("Enter: ") - 1 // 2),
                 "Enter: ")
             stdscr.refresh()
@@ -129,6 +129,7 @@ class Game:
         :return:
         """
         while not current_board.is_solved():
+            clear_screen(stdscr)
             # Print board
             print_board(current_board, stdscr)
             # Print prompt
@@ -139,8 +140,17 @@ class Game:
                 curses.COLS // 2 - ((len(self.game_loop_text[0]) + 1) // 2),
                 f"{self.game_loop_text[0]}\n")
 
+            stdscr.addstr(
+                y + 2,
+                curses.COLS // 2 - ((len(self.game_loop_text[1]) + 1) // 2),
+                f"{self.game_loop_text[1]}\n")
 
             try:
+                y, x = curses.getsyx()
+                stdscr.move(
+                    y + 3,
+                    curses.COLS // 2 - 3
+                )
                 raw_inputs = stdscr.getstr(5)
                 str_input = str(raw_inputs, "utf-8").split(',')
                 if str_input[0] == "Q" or str_input[0] == "q":
