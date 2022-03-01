@@ -1,7 +1,8 @@
 # Application
-from GameEngine.Game import Game
-import platform, os
 from curses import wrapper
+
+from GameEngine.Game import Game
+
 
 def main(stdscr):
     g = Game(stdscr)
