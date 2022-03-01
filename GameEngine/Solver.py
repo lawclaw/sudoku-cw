@@ -1,7 +1,7 @@
 # Brute force solver
 # TODO: Bruteforce solver
 
-def find_empty_square(current_board):
+def find_empty_square(current_board: []):
     for r in range(9):
         for c in range(9):
             if current_board[r][c] == 0:
@@ -31,7 +31,7 @@ def is_valid(board, guess, row, col):
     return True
 
 
-def brute_solve(board):
+def brute_solve(board: []) -> bool:
     row, col = find_empty_square(board)
 
     if row is None:

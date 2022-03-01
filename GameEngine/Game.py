@@ -16,10 +16,11 @@ class Game:
     ]
 
     game_loop_text = [
-        "Enter x, y coordinates and desired value [1-9] separated by comma:",
-        "Enter Q to quit",
+        "Enter x, y coordinates and desired value [1-9] separated by comma:\n",
+        "Enter Q to quit\n",
         "Immutable square...(Press Enter key to try again)\n",
-        "Invalid input...(Press Enter key to try again)\n"
+        "Invalid input...(Press Enter key to try again)\n",
+        "You solved the puzzle!"
     ]
 
     def __init__(self, stdscr: curses.wrapper):
@@ -49,7 +50,7 @@ class Game:
                     exit()
                 # Check if key is numeric
                 elif key == '1' or key == '2' or key == '3':
-                    board = Board(key)
+                    board = Board(int(key))
                     self.game_loop(board, stdscr)
                 else:
                     raise UnicodeError
@@ -77,13 +78,13 @@ class Game:
 
             stdscr.addstr(
                 y + 1,
-                curses.COLS // 2 - ((len(self.game_loop_text[0]) + 1) // 2),
-                f"{self.game_loop_text[0]}\n")
+                curses.COLS // 2 - (len(self.game_loop_text[0]) // 2),
+                f"{self.game_loop_text[0]}")
 
             stdscr.addstr(
                 y + 2,
-                curses.COLS // 2 - ((len(self.game_loop_text[1]) + 1) // 2),
-                f"{self.game_loop_text[1]}\n")
+                curses.COLS // 2 - (len(self.game_loop_text[1]) // 2),
+                f"{self.game_loop_text[1]}")
 
             try:
                 y, x = curses.getsyx()
@@ -98,7 +99,7 @@ class Game:
                 current_board.set_square(str_input[0], str_input[1], str_input[2])
             except ImmutableSquareError:
                 stdscr.addstr(
-                    y + 3,
+                    y + 4,
                     curses.COLS // 2 - ((len(self.game_loop_text[2]) + 1) // 2),
                     self.game_loop_text[2])
                 stdscr.refresh()
@@ -112,4 +113,11 @@ class Game:
                 stdscr.refresh()
                 hide_cursor(stdscr)
 
-        print("You solved it!")
+        # Solved puzzle!
+        if current_board.is_solved():
+            stdscr.addstr(
+                y + 4,
+                curses.COLS // 2 - ((len(self.game_loop_text[4]) + 1) // 2),
+                self.game_loop_text[4])
+            stdscr.refresh()
+            hide_cursor(stdscr)

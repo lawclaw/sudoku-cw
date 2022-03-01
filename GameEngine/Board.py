@@ -1,3 +1,4 @@
+import copy
 import random
 from GameEngine import Solver
 from GameEngine.ImmutableSquareError import ImmutableSquareError
@@ -30,9 +31,9 @@ class Board:
         Shuffling rows for random board
         """
 
-        # Shuffles the rows within each 3x3 borders 3 times
+        # Shuffles the rows within each 3x3 borders 4-10 times
         # https://blog.forret.com/2006/08/14/a-sudoku-challenge-generator/
-        for n in range(random.randint(4, 30)):
+        for n in range(random.randint(4, 10)):
             r1 = random.randint(0, 2)
             r2 = random.randint(0, 2)
             self.current_state[r1], self.current_state[r2] = self.current_state[r2], self.current_state[r1]
@@ -61,6 +62,7 @@ class Board:
             removals += 1
 
         self.original_state = deepcopy(self.current_state)
+
 
     def is_immutable(self, y, x):
         """
