@@ -1,4 +1,5 @@
 import curses
+import sys
 
 from ConsolePrint.UI import print_menu, hide_cursor, clear_screen, print_board
 from GameEngine.Board import Board
@@ -47,7 +48,7 @@ class Game:
                 key = str(raw_input, "utf-8")
                 # Exit condition
                 if key == 'Q' or key == "q":
-                    exit()
+                    sys.exit()
                 # Check if key is numeric
                 elif key == '1' or key == '2' or key == '3':
                     board = Board(int(key))
