@@ -49,7 +49,7 @@ class Board:
         if difficulty == 3:
             self.max_removals += random.randint(15, 25)
         elif difficulty == 2:
-            self.max_removals -= random.randint(10, 15)
+            self.max_removals += random.randint(10, 15)
 
         removals = 0
         while removals < self.max_removals:

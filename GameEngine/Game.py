@@ -6,6 +6,11 @@ from curses.textpad import Textbox
 from GameEngine.Board import Board
 from GameEngine.ImmutableSquareError import ImmutableSquareError
 
+def hide_cursor(stdscr):
+    curses.curs_set(0)
+    stdscr.getch()
+    curses.curs_set(1)
+
 def clear_screen(stdscr):  # https://stackoverflow.com/a/50560686
     """
     Clears terminal screen
@@ -50,7 +55,8 @@ def print_board(board: Board, stdscr: curses.wrapper):
         stdscr.addstr(
             curses.LINES // 10 + i,
             curses.COLS // 2 - ((len(line) + 1) // 2),
-            f"{line}\n"
+            f"{line}\n",
+            curses.color_pair(1)
         )
 
     # Refresh screen
@@ -92,7 +98,9 @@ class Game:
         Main game
         """
         while True:
+            # Curses initialization
             curses.echo()
+            curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
             # Menu
             print_menu(self.menu_text, stdscr)
 
@@ -104,20 +112,27 @@ class Game:
 
             # Input
             key = None
-            while key is None:
-                key = stdscr.getkey()
+            try:
+                input = stdscr.getstr(1)
+                key = str(input, "utf-8")
                 # Exit condition
-                if key in 'Qq':
+                if key == 'Q' or key == "q":
                     exit()
                 # Check if key is numeric
-                elif key in '123':
+                elif key == '1' or key == '2' or key == '3':
                     board = Board(key)
                     self.game_loop(board, stdscr)
                     break
                 else:
-                    stdscr.addstr("\nInvalid input, press Enter to try again")
-                    stdscr.refresh()
-                    stdscr.getch()
+                    raise UnicodeError
+            except UnicodeError:
+                stdscr.addstr(
+                    curses.LINES // 2 + 4,
+                    curses.COLS // 2 - (len("Invalid input, press Enter to try again") // 2),
+                    "Invalid input, press Enter to try again")
+                stdscr.refresh()
+                hide_cursor(stdscr)
+
 
 
 
@@ -157,15 +172,20 @@ class Game:
                     break
                 current_board.set_square(str_input[0], str_input[1], str_input[2])
             except ImmutableSquareError:
-                stdscr.addstr(self.game_loop_text[2])
+                stdscr.addstr(
+                    y + 3,
+                    curses.COLS // 2 - ((len(self.game_loop_text[2]) + 1) // 2),
+                    self.game_loop_text[2])
                 stdscr.refresh()
-                stdscr.getch()
-            except ValueError:
-                stdscr.addstr(self.game_loop_text[3])
+                hide_cursor(stdscr)
+
+            except (ValueError, IndexError):
+                stdscr.addstr(
+                    y + 4,
+                    curses.COLS // 2 - ((len(self.game_loop_text[3]) + 1) // 2),
+                    self.game_loop_text[3])
                 stdscr.refresh()
-                stdscr.getch()
-            except IndexError:
-                stdscr.addstr(self.game_loop_text[3])
-                stdscr.refresh()
-                stdscr.getch()
+                hide_cursor(stdscr)
+
+        print("You solved it!")
 
