@@ -1,7 +1,8 @@
 import curses
 import sys
 
-from ConsolePrint.UI import print_menu, hide_cursor, clear_screen, print_board
+import ConsolePrint.UI
+from ConsolePrint.UI import print_menu, hide_cursor, clear_screen, print_board, color_prepare
 from GameEngine.Board import Board
 from GameEngine.ImmutableSquareError import ImmutableSquareError
 
@@ -31,6 +32,7 @@ class Game:
         while True:
             # Curses initialization
             curses.echo()
+            color_prepare()
             # Menu
             print_menu(self.menu_text, stdscr)
 

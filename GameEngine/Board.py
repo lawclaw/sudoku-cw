@@ -63,7 +63,6 @@ class Board:
 
         self.original_state = deepcopy(self.current_state)
 
-
     def is_immutable(self, y, x):
         """
         Checks if board is immutable
@@ -83,9 +82,11 @@ class Board:
 
     def set_square(self, x, y, v):
         y, x, v = int(y), int(x), int(v)
-        for value in [y, x, v]:
+        for value in (y, x):
             if not self.__size > value >= 0:
                 raise ValueError
+        if not self.__size >= v >= 0:
+            raise ValueError
         if self.is_immutable(y, x):
             raise ImmutableSquareError
         self.current_state[y][x] = v
