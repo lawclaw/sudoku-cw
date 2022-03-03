@@ -31,7 +31,6 @@ class Game:
         while True:
             # Curses initialization
             curses.echo()
-            curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
             # Menu
             print_menu(self.menu_text, stdscr)
 
