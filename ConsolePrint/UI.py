@@ -133,5 +133,5 @@ def print_menu(menu_text, stdscr: curses.wrapper):
             curses.LINES // 3 + i,
             curses.COLS // 2 - ((len(menu_line) + 1) // 2),
             f"{menu_line}\n",
-            curses.color_pair(i + 1)
+            curses.color_pair(i + 1) | curses.A_BOLD
         )
