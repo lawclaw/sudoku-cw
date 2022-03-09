@@ -1,9 +1,13 @@
 import curses
 
-from GameEngine.Board import Board
+from GameEngine.board import Board
 
 
 def color_prepare():
+    """
+    Prepare color pair for printing
+    :return:
+    """
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_YELLOW, curses.COLOR_BLACK)
     curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
@@ -12,6 +16,11 @@ def color_prepare():
     curses.init_pair(6, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
 
 def hide_cursor(stdscr):
+    """
+    Hide cursor
+    :param stdscr:
+    :return:
+    """
     curses.curs_set(0)
     stdscr.getch()
     curses.curs_set(1)
@@ -26,6 +35,15 @@ def clear_screen(stdscr):  # https://stackoverflow.com/a/50560686
 
 
 def add_digit(stdscr, y_offset, x_offset, value: str, color: int = None):
+    """
+    Add digit/char to screen
+    :param stdscr:
+    :param y_offset:
+    :param x_offset:
+    :param value:
+    :param color:
+    :return:
+    """
     if color is None:
         stdscr.addstr(
             curses.LINES // 10 + y_offset,
@@ -51,6 +69,14 @@ def add_digit(stdscr, y_offset, x_offset, value: str, color: int = None):
 
 
 def add_line(stdscr: curses.wrapper, line: str, y_offset: int, x_offset: int = None):
+    """
+    Add line to screen
+    :param stdscr:
+    :param line:
+    :param y_offset:
+    :param x_offset:
+    :return:
+    """
     if x_offset is None:
         stdscr.addstr(
             curses.LINES // 10 + y_offset,
@@ -97,9 +123,9 @@ def print_board(board: Board, stdscr: curses.wrapper):
 
         for x in range(9):
             if board.is_immutable(y, x):
-                add_digit(stdscr, y_offset, x_offset, board.current_state[y][x])
+                add_digit(stdscr, y_offset, x_offset, board.board_states[-1][y][x])
             else:
-                add_digit(stdscr, y_offset, x_offset, board.current_state[y][x], x)
+                add_digit(stdscr, y_offset, x_offset, board.board_states[-1][y][x], x)
             x_offset += 2
 
         add_line(stdscr, "┃", y_offset, x_offset)
@@ -117,8 +143,6 @@ def print_board(board: Board, stdscr: curses.wrapper):
     add_line(stdscr, f"{'━' * 27}", y_offset)
     y_offset += 1
 
-
-    # Refresh screen
     stdscr.refresh()
 
 def print_menu(menu_text, stdscr: curses.wrapper):

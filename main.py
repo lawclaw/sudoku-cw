@@ -3,7 +3,7 @@
 # Application
 from curses import wrapper
 
-from GameEngine.Game import Game
+from GameEngine.game import Game
 
 
 def main(stdscr):

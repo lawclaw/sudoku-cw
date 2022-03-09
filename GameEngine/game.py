@@ -1,10 +1,9 @@
 import curses
 import sys
 
-import ConsolePrint.UI
-from ConsolePrint.UI import print_menu, hide_cursor, clear_screen, print_board, color_prepare
-from GameEngine.Board import Board
-from GameEngine.ImmutableSquareError import ImmutableSquareError
+from ConsolePrint.ui import print_menu, hide_cursor, clear_screen, print_board, color_prepare
+from GameEngine.board import Board
+from GameEngine.immutable_square_error import ImmutableSquareError
 
 
 class Game:
@@ -25,6 +24,7 @@ class Game:
         "You solved the puzzle!"
     ]
 
+
     def __init__(self, stdscr: curses.wrapper):
         """
         Main game
@@ -35,7 +35,6 @@ class Game:
             color_prepare()
             # Menu
             print_menu(self.menu_text, stdscr)
-
             stdscr.addstr(
                 curses.LINES // 2 + 3,
                 curses.COLS // 2 - (len("Enter: ") - 1 // 2),
@@ -43,7 +42,6 @@ class Game:
             stdscr.refresh()
 
             # Input
-            key = None
             try:
                 raw_input = stdscr.getstr(1)
                 key = str(raw_input, "utf-8")
@@ -63,6 +61,21 @@ class Game:
                     "Invalid input, press Enter to try again")
                 stdscr.refresh()
                 hide_cursor(stdscr)
+
+    def load(self, board):
+        """
+        Load board
+        :param board:
+        :return:
+        """
+
+    def save(self, board):
+        """
+        Save board
+        :param board:
+        :return:
+        """
+        board.to_json()
 
     def game_loop(self, current_board, stdscr):
         """
@@ -97,8 +110,14 @@ class Game:
                 raw_inputs = stdscr.getstr(5)
                 str_input = str(raw_inputs, "utf-8").split(',')
                 if str_input[0] == "Q" or str_input[0] == "q":
+                    self.save(current_board)
                     break
-                current_board.set_square(str_input[0], str_input[1], str_input[2])
+                elif str_input[0] == "U" or str_input[0] == "u":
+                    current_board.undo()
+                elif str_input[0] == "R" or str_input[0] == "r":
+                    current_board.redo()
+                else:
+                    current_board.set_square(str_input[0], str_input[1], str_input[2])
             except ImmutableSquareError:
                 stdscr.addstr(
                     y + 4,
