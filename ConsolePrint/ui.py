@@ -15,6 +15,7 @@ def color_prepare():
     curses.init_pair(5, curses.COLOR_BLUE, curses.COLOR_BLACK)
     curses.init_pair(6, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
 
+
 def hide_cursor(stdscr):
     """
     Hide cursor
@@ -82,31 +83,34 @@ def add_line(stdscr: curses.wrapper, line: str, y_offset: int, x_offset: int = N
             curses.LINES // 10 + y_offset,
             curses.COLS // 2 - ((len(line) + 1) // 2),
             f"{line}\n",
-            curses.color_pair(4) | curses.A_BOLD
+            curses.color_pair(2) | curses.A_BOLD
         )
     else:
         stdscr.addstr(
             curses.LINES // 10 + y_offset,
             curses.COLS // 2 + x_offset,
             f"{line} ",
-            curses.color_pair(4) | curses.A_BOLD
+            curses.color_pair(2) | curses.A_BOLD
         )
 
 
 def print_board(board: Board, stdscr: curses.wrapper):
     """
     Prints board
+    :param stdscr: Main window
     :param board: Sudoku board
     """
     y_offset = 0
     clear_screen(stdscr)
 
-    add_line(stdscr, f"{'━' * 27}", y_offset)
+    add_line(stdscr, "🆇", y_offset)
+    y_offset += 1
+    add_line(stdscr, '┏━━━┳━━━━━━━━━━━━━━━━━━━┳━━━┓', y_offset)
     y_offset += 1
 
-    ui = [' '.join(str(i) for i in range(0, 9)), '━' * 19]
-    ui[0] = '┃ d ┃ 0 1 2 3 4 5 6 7 8 ┃ d ┃'
-    ui[1] = '┃━━━━━━━━━━━━━━━━━━━━━━━━━━━┃'
+    ui = ['', '']
+    ui[0] = '┃ ◆ ┃ 0 1 2 3 4 5 6 7 8 ┃ ◆ ┃'
+    ui[1] = '┣━━━╋━━━━━━━━━━━━━━━━━━━╋━━━┫'
     for line in ui:
         add_line(stdscr, line, y_offset)
         y_offset += 1
@@ -114,12 +118,18 @@ def print_board(board: Board, stdscr: curses.wrapper):
     for y in range(9):
         x_offset = -15
 
+        if y == 4:
+            add_line(stdscr, "🆈", y_offset, -18)
+
         add_line(stdscr, "┃", y_offset, x_offset)
         x_offset += 2
-        add_line(stdscr, y, y_offset, x_offset)
+        add_line(stdscr, str(y), y_offset, x_offset)
         x_offset += 2
         add_line(stdscr, "┃", y_offset, x_offset)
         x_offset += 2
+
+        if y == 4:
+            add_line(stdscr, "🆈", y_offset, 15)
 
         for x in range(9):
             if board.is_immutable(y, x):
@@ -130,7 +140,7 @@ def print_board(board: Board, stdscr: curses.wrapper):
 
         add_line(stdscr, "┃", y_offset, x_offset)
         x_offset += 2
-        add_line(stdscr, y, y_offset, x_offset)
+        add_line(stdscr, str(y), y_offset, x_offset)
         x_offset += 2
         add_line(stdscr, "┃", y_offset, x_offset)
         x_offset += 2
@@ -140,15 +150,19 @@ def print_board(board: Board, stdscr: curses.wrapper):
     for line in reversed(ui):
         add_line(stdscr, line, y_offset)
         y_offset += 1
-    add_line(stdscr, f"{'━' * 27}", y_offset)
+    add_line(stdscr, '┗━━━┻━━━━━━━━━━━━━━━━━━━┻━━━┛', y_offset)
     y_offset += 1
 
+    add_line(stdscr, "🆇", y_offset)
+
     stdscr.refresh()
+
 
 def print_menu(menu_text, stdscr: curses.wrapper):
     """
     Prints game menu
-    :param menu_text:
+    :param stdscr: Main window
+    :param menu_text: Menu text
     :return:
     """
     clear_screen(stdscr)

@@ -24,7 +24,6 @@ class Game:
         "You solved the puzzle!"
     ]
 
-
     def __init__(self, stdscr: curses.wrapper):
         """
         Main game
@@ -33,6 +32,14 @@ class Game:
             # Curses initialization
             curses.echo()
             color_prepare()
+
+            # Check if screen size is big enough
+            max_y, max_x = stdscr.getmaxyx()
+            if max_y < 23 or max_x < 66:
+                stdscr.addstr(f"Too small window! Increase to at least 23x66")
+                stdscr.getch()
+                sys.exit()
+
             # Menu
             print_menu(self.menu_text, stdscr)
             stdscr.addstr(
