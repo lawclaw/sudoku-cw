@@ -14,6 +14,8 @@ def color_prepare():
     curses.init_pair(4, curses.COLOR_CYAN, curses.COLOR_BLACK)
     curses.init_pair(5, curses.COLOR_BLUE, curses.COLOR_BLACK)
     curses.init_pair(6, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+    curses.init_pair(7, curses.COLOR_WHITE, curses.COLOR_BLACK)
+
 
 
 def hide_cursor(stdscr):
@@ -58,14 +60,14 @@ def add_digit(stdscr, y_offset, x_offset, value: str, color: int = None):
                 curses.LINES // 10 + y_offset,
                 curses.COLS // 2 + x_offset,
                 "█ ",
-                curses.color_pair((color % 4) + 1)
+                curses.color_pair((color % 6) + 1)
             )
         else:
             stdscr.addstr(
                 curses.LINES // 10 + y_offset,
                 curses.COLS // 2 + x_offset,
                 f"{value} ",
-                curses.color_pair((color % 4) + 1)
+                curses.color_pair((color % 6) + 1)
             )
 
 

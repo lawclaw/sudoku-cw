@@ -13,6 +13,7 @@ class Game:
         "Easy. 1",
         "Medium. 2",
         "Hard. 3",
+        "Load game. 4",
         "Quit. Q"
     ]
 
@@ -43,7 +44,7 @@ class Game:
             # Menu
             print_menu(self.menu_text, stdscr)
             stdscr.addstr(
-                curses.LINES // 2 + 3,
+                curses.LINES // 2 + 4,
                 curses.COLS // 2 - (len("Enter: ") - 1 // 2),
                 "Enter: ")
             stdscr.refresh()
@@ -56,6 +57,9 @@ class Game:
                 if key == 'Q' or key == "q":
                     sys.exit()
                 # Check if key is numeric
+                if key == '4':
+                    board = Board(int(key), True)
+                    self.game_loop(board, stdscr)
                 elif key == '1' or key == '2' or key == '3':
                     board = Board(int(key))
                     self.game_loop(board, stdscr)

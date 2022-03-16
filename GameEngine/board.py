@@ -8,58 +8,65 @@ from copy import deepcopy
 class Board:
     _size = 9
 
-    def __init__(self, difficulty: int) -> None:
+    def __init__(self, difficulty: int, load: bool = None) -> None:
         """
         Constructor: Handles generation of board
         :param difficulty: game difficulty
         """
-        self.board_states = []
-        self.undone_states = []
 
-        # Generate 8 empty rows
-        board = [[0 for i in range(self._size)] for j in range(self._size - 1)]  # Empty board
+        if load is None:   # If not loading
 
-        # Generate 1 1-9 shuffled row at top
-        board.insert(0, [*range(1, self._size + 1)])
-        random.shuffle(board[0])
+            self.board_states = []
+            self.undone_states = []
 
-        # Fill the 8 remaining rows by bruteforce solving
-        solver.brute_solve(board)
+            # Generate 8 empty rows
+            board = [[0 for i in range(self._size)] for j in range(self._size - 1)]  # Empty board
 
-        """
-        Shuffling rows for random board
-        """
+            # Generate 1 1-9 shuffled row at top
+            board.insert(0, [*range(1, self._size + 1)])
+            random.shuffle(board[0])
 
-        # Shuffles the rows within each 3x3 borders 4-10 times
-        # https://blog.forret.com/2006/08/14/a-sudoku-challenge-generator/
-        for n in range(random.randint(4, 10)):
-            r1 = random.randint(0, 2)
-            r2 = random.randint(0, 2)
-            board[r1], board[r2] = board[r2], board[r1]
-            board[r1 + 3], board[r2 + 3] = board[r2 + 3], board[r1 + 3]
-            board[r1 + 6], board[r2 + 6] = board[r2 + 6], board[r1 + 6]
+            # Fill the 8 remaining rows by bruteforce solving
+            solver.brute_solve(board)
 
-        self.solved_state = deepcopy(board)
+            """
+            Shuffling rows for random board
+            """
 
-        """
-        Remove squares
-        """
-        max_removals = self._size ** 2 // 2
-        if difficulty == 3:
-            max_removals += random.randint(15, 25)
-        elif difficulty == 2:
-            max_removals += random.randint(10, 15)
+            # Shuffles the rows within each 3x3 borders 4-10 times
+            # https://blog.forret.com/2006/08/14/a-sudoku-challenge-generator/
+            for n in range(random.randint(4, 10)):
+                r1 = random.randint(0, 2)
+                r2 = random.randint(0, 2)
+                board[r1], board[r2] = board[r2], board[r1]
+                board[r1 + 3], board[r2 + 3] = board[r2 + 3], board[r1 + 3]
+                board[r1 + 6], board[r2 + 6] = board[r2 + 6], board[r1 + 6]
 
-        removals = 0
-        while removals < max_removals:
-            y = random.randint(0, self._size - 1)
-            x = random.randint(0, self._size - 1)
-            if board[y][x] == 0:
-                continue
-            board[y][x] = 0
-            removals += 1
+            self.solved_state = deepcopy(board)
 
-        self.board_states.append(deepcopy(board))
+            """
+            Remove squares
+            """
+            max_removals = self._size ** 2 // 2
+            if difficulty == 3:
+                max_removals += random.randint(15, 25)
+            elif difficulty == 2:
+                max_removals += random.randint(10, 15)
+
+            removals = 0
+            while removals < max_removals:
+                y = random.randint(0, self._size - 1)
+                x = random.randint(0, self._size - 1)
+                if board[y][x] == 0:
+                    continue
+                board[y][x] = 0
+                removals += 1
+
+            self.board_states.append(deepcopy(board))
+
+        else:   # If load option is selected
+            self.from_json()
+
 
     def undo(self) -> []:
         """
@@ -123,3 +130,15 @@ class Board:
         """
         with open('save_file.json', 'w') as file:
             file.write(json.dumps(self, default=lambda o: o.__dict__, indent=4))
+
+    def from_json(self):
+        """
+        Read from JSON file
+        :return:
+        """
+        with open('save_file.json', 'r') as file:
+            attributes = json.loads(file.read())
+        self.board_states = attributes['board_states']
+        self.undone_states = attributes['undone_states']
+        self.solved_state = attributes['solved_state']
+
