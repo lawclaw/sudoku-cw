@@ -21,7 +21,7 @@ class Board:
 
         # Generate 1 1-9 shuffled row at top
         board.insert(0, [*range(1, self._size + 1)])
-        random.shuffle(board)
+        random.shuffle(board[0])
 
         # Fill the 8 remaining rows by bruteforce solving
         solver.brute_solve(board)
