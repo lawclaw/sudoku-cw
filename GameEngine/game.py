@@ -36,7 +36,7 @@ class Game:
             # Check if screen size is big enough
             max_y, max_x = stdscr.getmaxyx()
             if max_y < 25 or max_x < 66:
-                stdscr.addstr(f"Too small window! Increase to at least 23x66")
+                stdscr.addstr(f"Too small window! Increase to at least 25x66")
                 stdscr.getch()
                 sys.exit()
 
