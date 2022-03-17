@@ -1,0 +1,3 @@
+class ImmutableSquareException(Exception):
+    pass
+

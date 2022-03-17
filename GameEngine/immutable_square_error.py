@@ -1,3 +1,0 @@
-class ImmutableSquareError(Exception):
-    pass
-

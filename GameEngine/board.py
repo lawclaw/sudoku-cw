@@ -1,7 +1,7 @@
 import json
 import random
 from GameEngine import solver
-from GameEngine.immutable_square_error import ImmutableSquareError
+from GameEngine.immutable_square_exception import ImmutableSquareException
 from copy import deepcopy
 
 
@@ -14,7 +14,7 @@ class Board:
         :param difficulty: game difficulty
         """
 
-        if load is None:   # If not loading
+        if load is None:  # If not loading
 
             self.board_states = []
             self.undone_states = []
@@ -64,9 +64,8 @@ class Board:
 
             self.board_states.append(deepcopy(board))
 
-        else:   # If load option is selected
+        else:  # If load option is selected
             self.from_json()
-
 
     def undo(self) -> []:
         """
@@ -119,7 +118,7 @@ class Board:
         if not self._size >= v >= 0:
             raise ValueError
         if self.is_immutable(y, x):
-            raise ImmutableSquareError
+            raise ImmutableSquareException
         self.board_states.append(deepcopy(self.board_states[-1]))
         self.board_states[-1][y][x] = v
 
@@ -141,4 +140,3 @@ class Board:
         self.board_states = attributes['board_states']
         self.undone_states = attributes['undone_states']
         self.solved_state = attributes['solved_state']
-
