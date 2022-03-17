@@ -1,7 +1,6 @@
 import curses
 
 from GameEngine.board import Board
-from GameEngine.immutable_square_exception import ImmutableSquareException
 
 menu_text = [
     "(dan)doku",
@@ -190,7 +189,6 @@ def print_menu(stdscr: curses.wrapper):
     """
     Prints game menu
     :param stdscr: Main window
-    :param menu_text: Menu text
     :return:
     """
     clear_screen(stdscr)
@@ -227,8 +225,6 @@ def print_input_error_text(stdscr: curses.wrapper, immutable_exception: bool = N
         input_error_text[immutable])
     stdscr.refresh()
     hide_cursor(stdscr)
-
-
 
 
 def print_victory(stdscr: curses.wrapper):

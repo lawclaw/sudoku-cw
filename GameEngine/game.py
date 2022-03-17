@@ -58,7 +58,7 @@ def save_game(board):
     """
     Save board
     :param board:
-    :return:
+    :return: None
     """
     board.to_json()
 
@@ -66,7 +66,7 @@ def save_game(board):
 def load_game():
     """
     Load board
-    :return:
+    :return: Board: loaded Sudoku board
     """
     board = Board(4, True)
     return board
@@ -77,8 +77,9 @@ def game_loop(current_board, stdscr):
     Game loop
     :param stdscr:
     :param current_board:
-    :return:
+    :return: None
     """
+    # Main loop
     while not current_board.is_solved():
 
         # Print board
@@ -110,9 +111,10 @@ def game_loop(current_board, stdscr):
         except (ValueError, IndexError):
             print_input_error_text(stdscr)
 
-    # Solved puzzle!
+    # Solved board!
     if current_board.is_solved():
         print_victory(stdscr)
         hide_cursor(stdscr)
 
+        # TODO: Victory screen with the option of replaying and (or) saving the current board
         clear_screen(stdscr)
