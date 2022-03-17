@@ -51,7 +51,8 @@ def add_digit(stdscr, y_offset, x_offset, value: str, color: int = None):
         stdscr.addstr(
             curses.LINES // 10 + y_offset,
             curses.COLS // 2 + x_offset,
-            f"{value} "
+            f"{value} ",
+            curses.A_BOLD
         )
     else:
         # Empty squares (mutable squares)
@@ -59,7 +60,7 @@ def add_digit(stdscr, y_offset, x_offset, value: str, color: int = None):
             stdscr.addstr(
                 curses.LINES // 10 + y_offset,
                 curses.COLS // 2 + x_offset,
-                "█ ",
+                "⯀ ",
                 curses.color_pair((color % 6) + 1)
             )
         else:
@@ -67,7 +68,7 @@ def add_digit(stdscr, y_offset, x_offset, value: str, color: int = None):
                 curses.LINES // 10 + y_offset,
                 curses.COLS // 2 + x_offset,
                 f"{value} ",
-                curses.color_pair((color % 6) + 1)
+                curses.color_pair((color % 6) + 1) | curses.A_BOLD
             )
 
 

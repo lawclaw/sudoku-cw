@@ -46,7 +46,8 @@ class Game:
             stdscr.addstr(
                 curses.LINES // 2 + 4,
                 curses.COLS // 2 - (len("Enter: ") - 1 // 2),
-                "Enter: ")
+                "Enter: ",
+                curses.A_BOLD)
             stdscr.refresh()
 
             # Input
@@ -105,7 +106,8 @@ class Game:
             stdscr.addstr(
                 y + 1,
                 curses.COLS // 2 - (len(self.game_loop_text[0]) // 2),
-                f"{self.game_loop_text[0]}")
+                f"{self.game_loop_text[0]}",
+                curses.A_BOLD)
 
             stdscr.addstr(
                 y + 2,
