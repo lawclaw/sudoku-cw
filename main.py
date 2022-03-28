@@ -7,7 +7,7 @@ from GameEngine.game import Game
 
 
 def main(stdscr):
-    game = Game(stdscr)
+    Game(stdscr)
 
 
 if __name__ == '__main__':

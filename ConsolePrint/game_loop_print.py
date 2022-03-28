@@ -9,8 +9,11 @@ game_loop_text = [
 ]
 
 victory_text = [
-    "You solved the puzzle!",
-    "Enter 1 to get replay of game"
+    "👍You solved the puzzle!👍",
+    "Enter 1 to get a replay of game",
+    "Enter 2 to replay the game",
+    "Enter 3 to save the game",
+    "Press Enter to return"
 ]
 
 
@@ -20,7 +23,6 @@ def print_victory(stdscr: curses.wrapper):
     :param stdscr:
     :return:
     """
-    clear_screen(stdscr)
     text_list_to_screen(victory_text, stdscr)
 
 

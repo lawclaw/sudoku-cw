@@ -64,7 +64,9 @@ class Board:
             max_removals += random.randint(10, 15)
 
         removals = 0
-        removals = max_removals -1
+        # DEBUG
+        removals = max_removals - 1
+
         while removals < max_removals:
             y = random.randint(0, self._size - 1)
             x = random.randint(0, self._size - 1)
@@ -92,6 +94,15 @@ class Board:
         if not self.undone_states:
             return
         self.board_states.append(self.undone_states.pop())
+
+    def reset(self) -> None:
+        """
+        Resets the board to its original state
+        :return:
+        """
+        temp = self.board_states[0]
+        self.board_states.clear()
+        self.board_states.append(temp)
 
     def is_immutable(self, y, x) -> bool:
         """

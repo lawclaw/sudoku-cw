@@ -16,8 +16,8 @@ class Game:
         Main game
         """
         curses_prep()
-        stdscr.refresh()
         screen_check(stdscr)
+
         menu(stdscr)
 
 
@@ -30,9 +30,6 @@ def screen_check(stdscr: curses.wrapper):
         sys.exit()
 
 
-
-
-
 def menu(stdscr: curses.wrapper):
     while True:
         # Menu
@@ -40,7 +37,8 @@ def menu(stdscr: curses.wrapper):
         print_menu(stdscr)
         stdscr.refresh()
         # Input
-        key = get_menu_input(stdscr)
+        key = get_user_input(stdscr)
+
         # Exit condition
         if key == 'Q' or key == "q":
             sys.exit()
@@ -51,55 +49,26 @@ def menu(stdscr: curses.wrapper):
                 clear_screen(stdscr)
                 print_menu(stdscr, True)
                 stdscr.refresh()
-                difficulty = get_menu_input(stdscr)
+                difficulty = get_user_input(stdscr)
                 if difficulty == 'Q' or difficulty == "q":
-                    break
+                    return
                 elif difficulty == '1' or difficulty == '2' or difficulty == '3':
                     board = Board(int(difficulty))
-                    game_loop(board, stdscr)
-                    break
+                    if game_loop(board, stdscr):
+                        game_loop(board, stdscr)
+                    else:
+                        return
                 else:
                     print_input_error_text(stdscr)
                     continue
 
         # Load game option
         elif key == '2':
-            board = load_game()
-            game_loop(board, stdscr)
+            current_board = load_game()
+            game_loop(current_board, stdscr)
+
         else:
             print_input_error_text(stdscr)
-
-
-def get_menu_input(stdscr: curses.wrapper):
-    try:
-        stdscr.addstr(
-            curses.LINES // 2 + 1,
-            curses.COLS // 2 - (len("Enter: ") - 1 // 2),
-            "Enter: ",
-            curses.A_BOLD)
-        raw_input = stdscr.getstr(1)
-        key = str(raw_input, "utf-8")
-        return key
-    except UnicodeError:
-        print_input_error_text(stdscr)
-
-
-def save_game(board):
-    """
-    Save board
-    :param board:
-    :return: None
-    """
-    board.to_json()
-
-
-def load_game():
-    """
-    Load board
-    :return: Board: loaded Sudoku board
-    """
-    board = Board(4, True)
-    return board
 
 
 def game_loop(current_board, stdscr):
@@ -127,11 +96,9 @@ def game_loop(current_board, stdscr):
                 y + 4,
                 curses.COLS // 2 - 3
             )
-            raw_inputs = stdscr.getstr(5)
-            str_input = str(raw_inputs, "utf-8").split(',')
+            str_input = get_user_input(stdscr, 5).split(',')
             if str_input[0] == "Q" or str_input[0] == "q":
                 save_game(current_board)
-                break
             elif str_input[0] == "U" or str_input[0] == "u":
                 current_board.undo()
             elif str_input[0] == "R" or str_input[0] == "r":
@@ -141,25 +108,75 @@ def game_loop(current_board, stdscr):
         except ImmutableSquareException:
             print_input_error_text(stdscr, True)
             stdscr.refresh()
-
         except (ValueError, IndexError):
             print_input_error_text(stdscr)
             stdscr.refresh()
 
-    # Solved board!
+    # Victory screen
     # TODO: Victory screen with the option of replaying and (or) saving the current board
-    if current_board.is_solved():
+    # Replay works, just need to add text
+    while True:
+        clear_screen(stdscr)
+
         print_victory(stdscr)
+
         stdscr.refresh()
-        choice = get_menu_input(stdscr)
+
+        choice = get_user_input(stdscr)
+
         if choice == '1':
             replay(stdscr, current_board)
+        elif choice == '2':
+            current_board.reset()
+            return True
+        elif choice == '3':
+            save_game(current_board)
+        else:
+            return False
 
 
 def replay(stdscr: curses.wrapper, current_board: Board):
     clear_screen(stdscr)
+
+    curses.curs_set(0)
+
     for n in range(len(current_board.board_states)):
         print_board_state(stdscr, current_board, n)
         stdscr.refresh()
-
         curses.napms(1000)
+
+    curses.curs_set(1)
+
+
+def get_user_input(stdscr: curses.wrapper, n_characters: int = None):
+    if n_characters is None:
+        n_characters = 1
+        stdscr.addstr(
+            curses.LINES // 2 + 1,
+            curses.COLS // 2 - (len("Enter: ") - 1 // 2),
+            "Enter: ",
+            curses.A_BOLD)
+    try:
+        raw_input = stdscr.getstr(n_characters)
+        key = str(raw_input, "utf-8")
+        return key
+    except UnicodeError:
+        print_input_error_text(stdscr)
+
+
+def save_game(board):
+    """
+    Save board
+    :param board:
+    :return: None
+    """
+    board.to_json()
+
+
+def load_game():
+    """
+    Load board
+    :return: Board: loaded Sudoku board
+    """
+    board = Board(4, True)
+    return board

@@ -19,6 +19,7 @@ menu_text = [
     "Quit. Q"
 ]
 
+
 def print_menu(stdscr: curses.wrapper, new_game: bool = None):
     """
     Prints game menu
