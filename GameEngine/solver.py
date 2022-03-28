@@ -1,6 +1,8 @@
 """
 Solver 
 """
+
+
 def find_empty_square(current_board: []) -> tuple[int, int]:
     """
     Find the closest empty square on board

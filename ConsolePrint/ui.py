@@ -5,10 +5,16 @@ from GameEngine.board import Board
 menu_text = [
     "(dan)doku",
     "Author: lawclaw",
+    "New game. 1",
+    "Load game. 2",
+    "Quit. Q"
+]
+
+difficulty_text = [
+    "(dan)doku",
     "Easy. 1",
     "Medium. 2",
     "Hard. 3",
-    "Load game. 4",
     "Quit. Q"
 ]
 
@@ -193,6 +199,23 @@ def print_menu(stdscr: curses.wrapper):
     """
     clear_screen(stdscr)
     for i, menu_line in enumerate(menu_text):
+        stdscr.addstr(
+            curses.LINES // 3 + i,
+            curses.COLS // 2 - ((len(menu_line) + 1) // 2),
+            f"{menu_line}\n",
+            curses.color_pair(i + 1) | curses.A_BOLD
+        )
+    stdscr.refresh()
+
+
+def print_new_game_menu(stdscr: curses.wrapper):
+    """
+    Prints difficulty menus
+    :param stdscr:
+    :return:
+    """
+    clear_screen(stdscr)
+    for i, menu_line in enumerate(difficulty_text):
         stdscr.addstr(
             curses.LINES // 3 + i,
             curses.COLS // 2 - ((len(menu_line) + 1) // 2),
