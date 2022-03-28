@@ -64,6 +64,7 @@ class Board:
             max_removals += random.randint(10, 15)
 
         removals = 0
+        removals = max_removals -1
         while removals < max_removals:
             y = random.randint(0, self._size - 1)
             x = random.randint(0, self._size - 1)

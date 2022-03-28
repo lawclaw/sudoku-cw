@@ -1,8 +1,11 @@
 import curses
 import sys
 
-from ConsolePrint.ui import print_menu, hide_cursor, clear_screen, print_board, color_prepare, print_victory, \
-    print_game_loop_text, print_input_error_text, print_new_game_menu
+from ConsolePrint.board_print import print_board_state
+from ConsolePrint.game_loop_print import print_game_loop_text, print_victory
+from ConsolePrint.menu_print import print_menu
+from ConsolePrint.ui import clear_screen, print_input_error_text, curses_prep
+
 from GameEngine.board import Board
 from GameEngine.immutable_square_exception import ImmutableSquareException
 
@@ -13,8 +16,10 @@ class Game:
         Main game
         """
         curses_prep()
+        stdscr.refresh()
         screen_check(stdscr)
         menu(stdscr)
+
 
 def screen_check(stdscr: curses.wrapper):
     # Check if screen size is big enough
@@ -24,15 +29,16 @@ def screen_check(stdscr: curses.wrapper):
         stdscr.getch()
         sys.exit()
 
-def curses_prep():
-    # Curses initialization
-    curses.echo()
-    color_prepare()
+
+
+
 
 def menu(stdscr: curses.wrapper):
     while True:
         # Menu
+        clear_screen(stdscr)
         print_menu(stdscr)
+        stdscr.refresh()
         # Input
         key = get_menu_input(stdscr)
         # Exit condition
@@ -42,7 +48,9 @@ def menu(stdscr: curses.wrapper):
         # New game option
         if key == '1':
             while True:
-                print_new_game_menu(stdscr)
+                clear_screen(stdscr)
+                print_menu(stdscr, True)
+                stdscr.refresh()
                 difficulty = get_menu_input(stdscr)
                 if difficulty == 'Q' or difficulty == "q":
                     break
@@ -57,7 +65,7 @@ def menu(stdscr: curses.wrapper):
         # Load game option
         elif key == '2':
             board = load_game()
-            game_loop(board, stdscr);
+            game_loop(board, stdscr)
         else:
             print_input_error_text(stdscr)
 
@@ -103,15 +111,18 @@ def game_loop(current_board, stdscr):
     """
     # Main loop
     while not current_board.is_solved():
+        clear_screen(stdscr)
 
         # Print board
-        print_board(current_board, stdscr)
+        print_board_state(stdscr, current_board)
+
+        stdscr.refresh()
 
         # Print prompt
         print_game_loop_text(stdscr)
 
         try:
-            y, x = curses.getsyx()
+            y, _ = curses.getsyx()
             stdscr.move(
                 y + 4,
                 curses.COLS // 2 - 3
@@ -129,14 +140,26 @@ def game_loop(current_board, stdscr):
                 current_board.set_square(str_input[0], str_input[1], str_input[2])
         except ImmutableSquareException:
             print_input_error_text(stdscr, True)
+            stdscr.refresh()
 
         except (ValueError, IndexError):
             print_input_error_text(stdscr)
+            stdscr.refresh()
 
     # Solved board!
+    # TODO: Victory screen with the option of replaying and (or) saving the current board
     if current_board.is_solved():
         print_victory(stdscr)
-        hide_cursor(stdscr)
+        stdscr.refresh()
+        choice = get_menu_input(stdscr)
+        if choice == '1':
+            replay(stdscr, current_board)
 
-        # TODO: Victory screen with the option of replaying and (or) saving the current board
-        clear_screen(stdscr)
+
+def replay(stdscr: curses.wrapper, current_board: Board):
+    clear_screen(stdscr)
+    for n in range(len(current_board.board_states)):
+        print_board_state(stdscr, current_board, n)
+        stdscr.refresh()
+
+        curses.napms(1000)
