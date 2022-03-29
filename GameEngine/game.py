@@ -16,18 +16,8 @@ class Game:
         Main game
         """
         curses_prep()
-        screen_check(stdscr)
-
         menu(stdscr)
 
-
-def screen_check(stdscr: curses.wrapper):
-    # Check if screen size is big enough
-    max_y, max_x = stdscr.getmaxyx()
-    if max_x < 66 or max_y < 25:
-        stdscr.addstr(f"Too small window! Increase to at least 66x25")
-        stdscr.getch()
-        sys.exit()
 
 
 def menu(stdscr: curses.wrapper):
@@ -57,10 +47,9 @@ def menu(stdscr: curses.wrapper):
                     if game_loop(board, stdscr):
                         game_loop(board, stdscr)
                     else:
-                        return
+                        break
                 else:
                     print_input_error_text(stdscr)
-                    continue
 
         # Load game option
         elif key == '2':
@@ -99,6 +88,7 @@ def game_loop(current_board, stdscr):
             str_input = get_user_input(stdscr, 5).split(',')
             if str_input[0] == "Q" or str_input[0] == "q":
                 save_game(current_board)
+                break
             elif str_input[0] == "U" or str_input[0] == "u":
                 current_board.undo()
             elif str_input[0] == "R" or str_input[0] == "r":
@@ -115,24 +105,25 @@ def game_loop(current_board, stdscr):
     # Victory screen
     # TODO: Victory screen with the option of replaying and (or) saving the current board
     # Replay works, just need to add text
-    while True:
-        clear_screen(stdscr)
+    if current_board.is_solved():
+        while True:
+            clear_screen(stdscr)
 
-        print_victory(stdscr)
+            print_victory(stdscr)
 
-        stdscr.refresh()
+            stdscr.refresh()
 
-        choice = get_user_input(stdscr)
+            choice = get_user_input(stdscr)
 
-        if choice == '1':
-            replay(stdscr, current_board)
-        elif choice == '2':
-            current_board.reset()
-            return True
-        elif choice == '3':
-            save_game(current_board)
-        else:
-            return False
+            if choice == '1':
+                replay(stdscr, current_board)
+            elif choice == '2':
+                current_board.reset()
+                return True
+            elif choice == '3':
+                save_game(current_board)
+            else:
+                return False
 
 
 def replay(stdscr: curses.wrapper, current_board: Board):
