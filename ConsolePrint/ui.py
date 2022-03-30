@@ -63,3 +63,13 @@ def text_list_to_screen(text_list, stdscr):
             curses.color_pair(i % 6 + 1) | curses.A_BOLD
         )
 
+
+def move_cursor(stdscr, y: int = None, x: int = None):
+    line, col = curses.getsyx()
+    if y is None:
+        y = 0
+    if x is None:
+        x = 0
+
+    stdscr.move(y+line,x+col)
+    stdscr.refresh()
