@@ -30,7 +30,7 @@ def print_game_loop_text(stdscr: curses.wrapper):
     y, x = curses.getsyx()
     for i, line in enumerate(game_loop_text):
         stdscr.addstr(
-            y + i + 1,
+            y + i,
             curses.COLS // 2 - (len(game_loop_text[i]) // 2),
             game_loop_text[i],
             curses.A_BOLD

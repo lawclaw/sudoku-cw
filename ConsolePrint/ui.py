@@ -60,6 +60,6 @@ def text_list_to_screen(text_list, stdscr):
             curses.LINES // 3 + i,
             curses.COLS // 2 - ((len(list_line) + 1) // 2),
             f"{list_line}",
-            curses.color_pair(i + 1) | curses.A_BOLD
+            curses.color_pair(i % 6 + 1) | curses.A_BOLD
         )
 

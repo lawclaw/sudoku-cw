@@ -67,6 +67,7 @@ def print_board_state(stdscr: curses.wrapper, board: Board, n: int = None):
     y_offset += 1
 
     add_line(stdscr, "🆇", y_offset)
+    add_line(stdscr,"", y_offset + 1)
 
 
 def add_digit(stdscr, y_offset, x_offset, value: str, color: int = None):
@@ -92,7 +93,7 @@ def add_digit(stdscr, y_offset, x_offset, value: str, color: int = None):
             stdscr.addstr(
                 curses.LINES // 10 + y_offset,
                 curses.COLS // 2 + x_offset,
-                "⯀ ",
+                "⯀",
                 curses.color_pair((color % 6) + 1)
             )
         else:

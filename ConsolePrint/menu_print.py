@@ -3,20 +3,24 @@ import curses
 from ConsolePrint.ui import text_list_to_screen
 
 difficulty_text = [
-    "(dan)doku",
-    "Easy. 1",
-    "Medium. 2",
-    "Hard. 3",
-    "Quit. Q"
+    "(dan)doku²",
+    "━━━━━━━━━━━━",
+    "▶ 1.   Easy",
+    "▶ 2. Medium",
+    "▶ 3.   Hard",
+    "▶   Quit. Q",
+
 ]
 
 
 menu_text = [
-    "(dan)doku",
-    "Author: lawclaw",
-    "New game. 1",
-    "Load game. 2",
-    "Quit. Q"
+    "(dan)doku²",
+    "━━━━━━━━━━━━━━",
+    "▶ 1.  New game",
+    "▶ 2. Load game",
+    "▶      Quit. Q",
+
+
 ]
 
 

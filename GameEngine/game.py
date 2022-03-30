@@ -19,7 +19,6 @@ class Game:
         menu(stdscr)
 
 
-
 def menu(stdscr: curses.wrapper):
     while True:
         # Menu
@@ -54,8 +53,8 @@ def menu(stdscr: curses.wrapper):
         # Load game option
         elif key == '2':
             current_board = load_game()
-            game_loop(current_board, stdscr)
-
+            if game_loop(current_board, stdscr):
+                game_loop(current_board, stdscr)
         else:
             print_input_error_text(stdscr)
 
@@ -79,12 +78,9 @@ def game_loop(current_board, stdscr):
         # Print prompt
         print_game_loop_text(stdscr)
 
+        stdscr.refresh()
+
         try:
-            y, _ = curses.getsyx()
-            stdscr.move(
-                y + 4,
-                curses.COLS // 2 - 3
-            )
             str_input = get_user_input(stdscr, 5).split(',')
             if str_input[0] == "Q" or str_input[0] == "q":
                 save_game(current_board)
@@ -142,11 +138,15 @@ def replay(stdscr: curses.wrapper, current_board: Board):
 def get_user_input(stdscr: curses.wrapper, n_characters: int = None):
     if n_characters is None:
         n_characters = 1
-        stdscr.addstr(
-            curses.LINES // 2 + 1,
-            curses.COLS // 2 - (len("Enter: ") - 1 // 2),
-            "Enter: ",
-            curses.A_BOLD)
+
+    y, _ = curses.getsyx()
+
+    stdscr.addstr(
+        y + 2,
+        curses.COLS // 2 - (len("Enter: ") - 1 // 2),
+        "Enter: ",
+        curses.A_BOLD)
+
     try:
         raw_input = stdscr.getstr(n_characters)
         key = str(raw_input, "utf-8")
