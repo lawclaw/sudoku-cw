@@ -41,7 +41,7 @@ def menu(stdscr: curses.wrapper):
                 stdscr.refresh()
                 difficulty = get_user_input(stdscr)
                 if difficulty == 'Q' or difficulty == "q":
-                    return
+                    break
                 elif difficulty == '1' or difficulty == '2' or difficulty == '3':
                     board = Board(int(difficulty))
                     if game_loop(board, stdscr):
