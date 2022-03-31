@@ -1,15 +1,16 @@
 import curses
 
-from ConsolePrint.ui import text_list_to_screen
+from ConsolePrint.ui import str_list_to_screen
 
 difficulty_text = [
     "(dan)doku²",
     "━━━━━━━━━━━━",
-    "▶ 1.   Easy",
-    "▶ 2. Medium",
-    "▶ 3.   Hard",
-    "▶   Quit. Q",
-
+    "▶ 1.    Easy",
+    "▶ 2.  Medium",
+    "▶ 3.    Hard",
+    "▶ Go back. Q",
+    "━━━━━━━━━━━━",
+    "Enter:"
 ]
 
 
@@ -19,8 +20,8 @@ menu_text = [
     "▶ 1.  New game",
     "▶ 2. Load game",
     "▶      Quit. Q",
-
-
+    "━━━━━━━━━━━━━━",
+    "Enter:"
 ]
 
 
@@ -32,6 +33,6 @@ def print_menu(stdscr: curses.wrapper, new_game: bool = None):
     :return:
     """
     if new_game is None:
-        text_list_to_screen(menu_text, stdscr)
+        str_list_to_screen(menu_text, stdscr)
     elif new_game:
-        text_list_to_screen(difficulty_text, stdscr)
+        str_list_to_screen(difficulty_text, stdscr)

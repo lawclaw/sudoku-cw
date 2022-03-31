@@ -1,6 +1,6 @@
 import curses
 
-from ConsolePrint.ui import clear_screen, text_list_to_screen
+from ConsolePrint.ui import clear_screen, str_list_to_screen
 
 game_loop_text = [
     "Enter x, y coordinates and desired value [1-9] separated by comma:",
@@ -23,7 +23,7 @@ def print_victory(stdscr: curses.wrapper):
     :param stdscr:
     :return:
     """
-    text_list_to_screen(victory_text, stdscr)
+    str_list_to_screen(victory_text, stdscr)
 
 
 def print_game_loop_text(stdscr: curses.wrapper):
@@ -32,6 +32,5 @@ def print_game_loop_text(stdscr: curses.wrapper):
         stdscr.addstr(
             y + i,
             curses.COLS // 2 - (len(game_loop_text[i]) // 2),
-            game_loop_text[i],
-            curses.A_BOLD
+            game_loop_text[i]
         )

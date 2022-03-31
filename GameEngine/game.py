@@ -1,13 +1,15 @@
 import curses
 import sys
 
-from ConsolePrint.board_print import print_board_state
+from ConsolePrint.board_print import print_board_state, add_line
 from ConsolePrint.game_loop_print import print_game_loop_text, print_victory
 from ConsolePrint.menu_print import print_menu
-from ConsolePrint.ui import clear_screen, print_input_error_text, curses_prep
+from ConsolePrint.ui import clear_screen, print_input_error_text, curses_prep, move_cursor
 
 from GameEngine.board import Board
 from GameEngine.immutable_square_exception import ImmutableSquareException
+
+from curses.textpad import rectangle
 
 
 class Game:
@@ -24,7 +26,6 @@ def menu(stdscr: curses.wrapper):
         # Menu
         clear_screen(stdscr)
         print_menu(stdscr)
-        stdscr.refresh()
         # Input
         key = get_user_input(stdscr)
 
@@ -58,7 +59,6 @@ def menu(stdscr: curses.wrapper):
         else:
             print_input_error_text(stdscr)
 
-
 def game_loop(current_board, stdscr):
     """
     Game loop
@@ -73,15 +73,13 @@ def game_loop(current_board, stdscr):
         # Print board
         print_board_state(stdscr, current_board)
 
-        stdscr.refresh()
-
         # Print prompt
         print_game_loop_text(stdscr)
 
         stdscr.refresh()
 
         try:
-            str_input = get_user_input(stdscr, 5).split(',')
+            str_input = get_user_input(stdscr, 5, False).split(',')
             if str_input[0] == "Q" or str_input[0] == "q":
                 save_game(current_board)
                 break
@@ -135,17 +133,12 @@ def replay(stdscr: curses.wrapper, current_board: Board):
     curses.curs_set(1)
 
 
-def get_user_input(stdscr: curses.wrapper, n_characters: int = None):
+def get_user_input(stdscr: curses.wrapper, n_characters: int = None, visible: bool = True):
     if n_characters is None:
         n_characters = 1
 
-    y, _ = curses.getsyx()
-
-    stdscr.addstr(
-        y + 2,
-        curses.COLS // 2 - (len("Enter: ") - 1 // 2),
-        "Enter: ",
-        curses.A_BOLD)
+    if not visible:
+        move_cursor(stdscr, 1, -11)
 
     try:
         raw_input = stdscr.getstr(n_characters)

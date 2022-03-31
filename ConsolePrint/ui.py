@@ -1,4 +1,5 @@
 import curses
+import random
 
 input_error_text = [
     "Immutable square...(Press Enter key to try again)",
@@ -8,18 +9,18 @@ input_error_text = [
 
 def curses_prep():
     """
-    Curses initialization and prepare color pair for printing
+    Curses initialization
+    Preparation of colored console text
     :return:
     """
     curses.echo()
-    
-    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
-    curses.init_pair(2, curses.COLOR_YELLOW, curses.COLOR_BLACK)
-    curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
-    curses.init_pair(4, curses.COLOR_CYAN, curses.COLOR_BLACK)
-    curses.init_pair(5, curses.COLOR_BLUE, curses.COLOR_BLACK)
-    curses.init_pair(6, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
-    curses.init_pair(7, curses.COLOR_WHITE, curses.COLOR_BLACK)
+
+    curses.start_color()
+    curses.use_default_colors()
+
+    for i in range(0, curses.COLORS):
+        curses.init_pair(i + 1, i, -1)
+
 
 def hide_cursor(stdscr):
     """
@@ -54,14 +55,15 @@ def print_input_error_text(stdscr: curses.wrapper, immutable_exception: bool = N
     hide_cursor(stdscr)
 
 
-def text_list_to_screen(text_list, stdscr):
+def str_list_to_screen(text_list, stdscr):
     for i, list_line in enumerate(text_list):
         stdscr.addstr(
             curses.LINES // 3 + i,
             curses.COLS // 2 - ((len(list_line) + 1) // 2),
             f"{list_line}",
-            curses.color_pair(i % 6 + 1) | curses.A_BOLD
+            curses.color_pair(i + 2) | curses.A_BOLD
         )
+    stdscr.refresh()
 
 
 def move_cursor(stdscr, y: int = None, x: int = None):
@@ -71,5 +73,5 @@ def move_cursor(stdscr, y: int = None, x: int = None):
     if x is None:
         x = 0
 
-    stdscr.move(y+line,x+col)
+    stdscr.move(y + line, x + col)
     stdscr.refresh()
