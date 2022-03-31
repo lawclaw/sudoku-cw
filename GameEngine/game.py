@@ -4,6 +4,7 @@ import sys
 from ConsolePrint.board_print import print_board_state, add_line
 from ConsolePrint.game_loop_print import print_game_loop_text, print_victory
 from ConsolePrint.menu_print import print_menu
+from ConsolePrint.sidebar_print import print_sidebar
 from ConsolePrint.ui import clear_screen, print_input_error_text, curses_prep, move_cursor
 
 from GameEngine.board import Board
@@ -73,13 +74,18 @@ def game_loop(current_board, stdscr):
         # Print board
         print_board_state(stdscr, current_board)
 
+        # Print sidebar
+        print_sidebar(stdscr)
+
+        stdscr.refresh()
+        move_cursor(stdscr, 7)
         # Print prompt
         print_game_loop_text(stdscr)
 
         stdscr.refresh()
 
         try:
-            str_input = get_user_input(stdscr, 5, False).split(',')
+            str_input = get_user_input(stdscr, 5).split(',')
             if str_input[0] == "Q" or str_input[0] == "q":
                 save_game(current_board)
                 break
