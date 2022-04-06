@@ -4,7 +4,7 @@ import sys
 from ConsolePrint.board_print import print_board_state, add_line
 from ConsolePrint.game_loop_print import print_game_loop_text, print_victory
 from ConsolePrint.menu_print import print_menu
-from ConsolePrint.sidebar_print import print_sidebar
+from ConsolePrint.sidebar_print import print_sidebar, score
 from ConsolePrint.ui import clear_screen, print_input_error_text, curses_prep, move_cursor
 
 from GameEngine.board import Board
@@ -74,13 +74,25 @@ def game_loop(current_board, stdscr):
         # Print board
         print_board_state(stdscr, current_board)
 
+        stdscr.refresh()
+
         # Print sidebar
         print_sidebar(stdscr)
 
         stdscr.refresh()
-        move_cursor(stdscr, 7)
+
+        score(stdscr, current_board)
+
+        stdscr.refresh()
+
+        if curses.LINES > 30:
+            move_cursor(stdscr, curses.LINES // 9, -43)
+
+        else:
+            move_cursor(stdscr, curses.LINES // 4, -43)
+
         # Print prompt
-        print_game_loop_text(stdscr)
+        #print_game_loop_text(stdscr)
 
         stdscr.refresh()
 

@@ -3,7 +3,7 @@ import curses
 from ConsolePrint.ui import str_list_to_screen
 
 difficulty_text = [
-    "(dan)doku²",
+    "(crs)doku²",
     "━━━━━━━━━━━━",
     "▶ 1.    Easy",
     "▶ 2.  Medium",
@@ -15,7 +15,7 @@ difficulty_text = [
 
 
 menu_text = [
-    "(dan)doku²",
+    "(crs)doku²",
     "━━━━━━━━━━━━━━",
     "▶ 1.  New game",
     "▶ 2. Load game",

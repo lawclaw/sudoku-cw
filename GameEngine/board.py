@@ -104,6 +104,19 @@ class Board:
         self.board_states.clear()
         self.board_states.append(temp)
 
+    def get_number_of_empty_squares(self) -> int:
+        """
+        Gets the number of empty squares
+        :return:
+        """
+        empty_squares = 0
+        for y in range(self._size):
+            for x in range(self._size):
+                if self.board_states[-1][y][x] == 0:
+                    empty_squares += 1
+        return empty_squares
+
+
     def is_immutable(self, y, x) -> bool:
         """
         Checks if board is immutable

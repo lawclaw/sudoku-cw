@@ -38,7 +38,7 @@ def print_board_state(stdscr: curses.wrapper, board: Board, n: int = None):
     for line in board_frame_top:
         add_line(stdscr, line)
 
-    move_cursor(stdscr, None, curses.COLS // 2 - 15)
+    move_cursor(stdscr, 0, curses.COLS // 2 - 15)
 
     # Board
     for y in range(9):
@@ -68,7 +68,6 @@ def print_board_state(stdscr: curses.wrapper, board: Board, n: int = None):
     # Bottom frame
     for line in board_frame_bottom:
         add_line(stdscr, line)
-
 
 def add_y_symbol(stdscr: curses.wrapper, position: str) -> None:
     """
