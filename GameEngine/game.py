@@ -1,16 +1,15 @@
 import curses
 import sys
+import time
+import datetime
 
-from ConsolePrint.board_print import print_board_state, add_line
-from ConsolePrint.game_loop_print import print_game_loop_text, print_victory
+from ConsolePrint.board_print import print_board_state
+from ConsolePrint.game_loop_print import print_victory, print_game_loop_text
 from ConsolePrint.menu_print import print_menu
 from ConsolePrint.sidebar_print import print_sidebar, score
 from ConsolePrint.ui import clear_screen, print_input_error_text, curses_prep, move_cursor
-
 from GameEngine.board import Board
 from GameEngine.immutable_square_exception import ImmutableSquareException
-
-from curses.textpad import rectangle
 
 
 class Game:
@@ -60,6 +59,7 @@ def menu(stdscr: curses.wrapper):
         else:
             print_input_error_text(stdscr)
 
+
 def game_loop(current_board, stdscr):
     """
     Game loop
@@ -85,14 +85,17 @@ def game_loop(current_board, stdscr):
 
         stdscr.refresh()
 
-        if curses.LINES > 30:
-            move_cursor(stdscr, curses.LINES // 9, -43)
-
+        if curses.LINES > 40:
+            move_cursor(stdscr, 4, -43)
+        elif curses.LINES > 30:
+            move_cursor(stdscr, 6, -43)
         else:
-            move_cursor(stdscr, curses.LINES // 4, -43)
+            move_cursor(stdscr, 8, -43)
+
+        stdscr.refresh()
 
         # Print prompt
-        #print_game_loop_text(stdscr)
+        print_game_loop_text(stdscr)
 
         stdscr.refresh()
 

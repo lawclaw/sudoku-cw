@@ -1,4 +1,7 @@
 import curses
+import datetime
+import time
+import threading
 
 from ConsolePrint.ui import move_cursor
 from GameEngine.board import Board
@@ -7,7 +10,7 @@ sidebar_text = [
     "┏━━━┳━━━━━━━━━━┳━━━┓",
     "┃ ◆ ┃ Controls ┃ ◆ ┃",
     "┣━━━┻━━━━━━━━━━┻━━━┫",
-    "┃ Input: x,y,value ┃",
+    "┃  Move:x,y,value  ┃",
     "┣━━━━━━━━━━━━━━━━━━┫",
     "┃    Undo: U,u     ┃",
     "┣━━━━━━━━━━━━━━━━━━┫",
@@ -20,10 +23,9 @@ sidebar_text = [
 
 number_of_player_actions = 0
 
-
 # Problem, not responsive
 def print_sidebar(stdscr: curses.wrapper):
-    uly, ulx = curses.LINES // 2 - 8, curses.COLS // 2 - 40
+    uly, ulx = curses.LINES // 2 - 9, curses.COLS // 2 - 40
 
     for i, list_line in enumerate(sidebar_text):
         stdscr.addstr(
@@ -46,13 +48,12 @@ def score(stdscr: curses.wrapper, board: Board):
         "┣━━━━━━━━━━━━━━━━━━┫",
         "",
         "┣━━━━━━━━━━━━━━━━━━┫",
-        "",
-        "┣━━━━━━━━━━━━━━━━━━┫",
-        "",
+        "┃ ◆ ┃  Score   ┃ ◆ ┃",
         "┗━━━━━━━━━━━━━━━━━━┛"
     ]
 
     scoreboard_text[3] = add_score_line("Empty squares:", str(board.get_number_of_empty_squares()))
+    scoreboard_text[5] = add_score_line("Filled squares:", str(board.get_number_of_empty_squares()))
 
     for i, list_line in enumerate(scoreboard_text):
         if not list_line:
