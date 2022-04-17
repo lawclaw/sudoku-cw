@@ -11,7 +11,7 @@ sidebar_text = [
     "┣━━━━━━━━━━━━━━━━━━┫",
     "┃   Redo: R / r    ┃",
     "┣━━━━━━━━━━━━━━━━━━┫",
-    "┃    Quit: Q,q     ┃",
+    "┃   Quit: Q / q    ┃",
     "┗━━━━━━━━━━━━━━━━━━┛"
 
 ]
@@ -53,13 +53,13 @@ def print_scoreboard(stdscr: curses.wrapper, board: Board) -> None:
         "",
         "┣━━━━━━━━━━━━━━━━━━┫",
         "",
-        "┣━━━━━━━━━━━━━━━━━━┫",
-        "┃ ◆ ┃  Score   ┃ ◆ ┃",
-        "┗━━━━━━━━━━━━━━━━━━┛"
+        "┣━━━┳━━━━━━━━━━┳━━━┫",
+        "┃ ◆ ┣━━━━━━━━━━┫ ◆ ┃",
+        "┗━━━┻━━━━━━━━━━┻━━━┛"
     ]
 
     scoreboard_text[3] = add_score_line("Empty squares:", str(board.get_number_of_empty_squares()))
-    scoreboard_text[5] = add_score_line("Filled squares:", str(board.get_number_of_empty_squares()))
+    scoreboard_text[5] = add_score_line("Filled squares:", str(board.size - board.get_number_of_empty_squares()))
 
     for i, list_line in enumerate(scoreboard_text):
         if not list_line:

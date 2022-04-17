@@ -167,3 +167,7 @@ class Board:
         self.board_states = attributes['board_states']
         self.undone_states = attributes['undone_states']
         self.solved_state = attributes['solved_state']
+
+    @property
+    def size(self):
+        return self._size ** 2
