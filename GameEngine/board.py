@@ -6,7 +6,7 @@ from copy import deepcopy
 
 
 class Board:
-    _size = 9
+    _size = 9   # Board size
 
     def __init__(self, difficulty: int, load: bool = None) -> None:
         """
@@ -40,9 +40,6 @@ class Board:
         # Fill the 8 remaining rows by bruteforce solving
         solver.brute_solve(board)
 
-        """
-        Shuffling rows for random board
-        """
         # Shuffles the rows within each 3x3 borders 4-10 times
         # https://blog.forret.com/2006/08/14/a-sudoku-challenge-generator/
         for n in range(random.randint(4, 10)):
@@ -54,9 +51,7 @@ class Board:
 
         self.solved_state = deepcopy(board)
 
-        """
-        Remove squares
-        """
+        # Remove squares
         max_removals = self._size ** 2 // 2
         if difficulty == 3:
             max_removals += random.randint(15, 25)
@@ -65,7 +60,7 @@ class Board:
 
         removals = 0
         # DEBUG
-        #removals = max_removals - 1
+        # removals = max_removals - 1
 
         while removals < max_removals:
             y = random.randint(0, self._size - 1)
@@ -79,7 +74,7 @@ class Board:
 
     def undo(self) -> []:
         """
-        Undo function
+        Undo functionality
         :return: None
         """
         if len(self.board_states) == 1:
@@ -88,7 +83,7 @@ class Board:
 
     def redo(self) -> None:
         """
-        Redo function
+        Redo functionality
         :return: None
         """
         if not self.undone_states:
@@ -107,15 +102,14 @@ class Board:
     def get_number_of_empty_squares(self) -> int:
         """
         Gets the number of empty squares
-        :return:
+        :return: number of unfilled squares
         """
-        empty_squares = 0
+        empty_squares: int = 0
         for y in range(self._size):
             for x in range(self._size):
                 if self.board_states[-1][y][x] == 0:
                     empty_squares += 1
         return empty_squares
-
 
     def is_immutable(self, y, x) -> bool:
         """
@@ -155,7 +149,7 @@ class Board:
         self.board_states.append(deepcopy(self.board_states[-1]))  # Copy current state and append on list
         self.board_states[-1][y][x] = v  # Change top state square with digit
 
-    def to_json(self):
+    def to_json(self) -> None:
         """
         Serialize to JSON file
         :return: None
@@ -163,7 +157,7 @@ class Board:
         with open('save_file.json', 'w') as file:
             file.write(json.dumps(self, default=lambda o: o.__dict__, indent=4))
 
-    def from_json(self):
+    def from_json(self) -> None:
         """
         Read from JSON file
         :return: None

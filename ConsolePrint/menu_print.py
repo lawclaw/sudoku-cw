@@ -25,12 +25,12 @@ menu_text = [
 ]
 
 
-def print_menu(stdscr: curses.wrapper, new_game: bool = None):
+def print_menu(stdscr: curses.wrapper, new_game: bool = None) -> None:
     """
     Prints game menu
-    :param new_game:
     :param stdscr: Main window
-    :return:
+    :param new_game: True if new game, otherwise False
+    :return: None
     """
     if new_game is None:
         str_list_to_screen(menu_text, stdscr)

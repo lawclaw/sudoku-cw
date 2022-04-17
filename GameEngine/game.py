@@ -1,27 +1,31 @@
 import curses
 import sys
-import time
-import datetime
 
 from ConsolePrint.board_print import print_board_state
-from ConsolePrint.game_loop_print import print_victory, print_game_loop_text
+from ConsolePrint.game_loop_print import print_victory, print_input_prompt
 from ConsolePrint.menu_print import print_menu
-from ConsolePrint.sidebar_print import print_sidebar, score
+from ConsolePrint.sidebar_print import print_sidebar, print_scoreboard
 from ConsolePrint.ui import clear_screen, print_input_error_text, curses_prep, move_cursor
 from GameEngine.board import Board
 from GameEngine.immutable_square_exception import ImmutableSquareException
 
 
 class Game:
-    def __init__(self, stdscr: curses.wrapper):
+    def __init__(self, stdscr: curses.wrapper) -> None:
         """
-        Main game
+        Constructor
+        :param stdscr: main window
         """
         curses_prep()
         menu(stdscr)
 
 
-def menu(stdscr: curses.wrapper):
+def menu(stdscr: curses.wrapper) -> None:
+    """
+    Top menu node, the main menu
+    :param stdscr: main window
+    :return: None
+    """
     while True:
         # Menu
         clear_screen(stdscr)
@@ -35,37 +39,48 @@ def menu(stdscr: curses.wrapper):
 
         # New game option
         if key == '1':
-            while True:
-                clear_screen(stdscr)
-                print_menu(stdscr, True)
-                stdscr.refresh()
-                difficulty = get_user_input(stdscr)
-                if difficulty == 'Q' or difficulty == "q":
-                    break
-                elif difficulty == '1' or difficulty == '2' or difficulty == '3':
-                    board = Board(int(difficulty))
-                    if game_loop(board, stdscr):
-                        game_loop(board, stdscr)
-                    else:
-                        break
-                else:
-                    print_input_error_text(stdscr)
+            new_game_screen(stdscr)
 
         # Load game option
         elif key == '2':
             current_board = load_game()
             if game_loop(current_board, stdscr):
                 game_loop(current_board, stdscr)
+
+        # Any other input
         else:
             print_input_error_text(stdscr)
 
 
-def game_loop(current_board, stdscr):
+def new_game_screen(stdscr: curses.wrapper) -> None:
     """
-    Game loop
-    :param stdscr:
-    :param current_board:
+    Prints the new game screen with difficulty selection
+    :param stdscr: main window
     :return: None
+    """
+    while True:
+        clear_screen(stdscr)
+        print_menu(stdscr, True)
+        stdscr.refresh()
+        difficulty = get_user_input(stdscr)
+        if difficulty == 'Q' or difficulty == "q":
+            return
+        elif difficulty == '1' or difficulty == '2' or difficulty == '3':
+            board = Board(int(difficulty))
+            if game_loop(board, stdscr):
+                game_loop(board, stdscr)
+            else:
+                return
+        else:
+            print_input_error_text(stdscr)
+
+
+def game_loop(current_board: Board, stdscr) -> bool:
+    """
+    Main game loop where user can play Sudoku
+    :param stdscr: main window
+    :param current_board: Board object
+    :return: bool: True if user chooses to replay, otherwise False
     """
     # Main loop
     while not current_board.is_solved():
@@ -73,16 +88,12 @@ def game_loop(current_board, stdscr):
 
         # Print board
         print_board_state(stdscr, current_board)
-
         stdscr.refresh()
 
         # Print sidebar
         print_sidebar(stdscr)
-
         stdscr.refresh()
-
-        score(stdscr, current_board)
-
+        print_scoreboard(stdscr, current_board)
         stdscr.refresh()
 
         if curses.LINES > 40:
@@ -95,8 +106,7 @@ def game_loop(current_board, stdscr):
         stdscr.refresh()
 
         # Print prompt
-        print_game_loop_text(stdscr)
-
+        print_input_prompt(stdscr)
         stdscr.refresh()
 
         try:
@@ -118,8 +128,6 @@ def game_loop(current_board, stdscr):
             stdscr.refresh()
 
     # Victory screen
-    # TODO: Victory screen with the option of replaying and (or) saving the current board
-    # Replay works, just need to add text
     if current_board.is_solved():
         while True:
             clear_screen(stdscr)
@@ -141,7 +149,13 @@ def game_loop(current_board, stdscr):
                 return False
 
 
-def replay(stdscr: curses.wrapper, current_board: Board):
+def replay(stdscr: curses.wrapper, current_board: Board) -> None:
+    """
+    Replays the user's game by displaying each state with delays
+    :param stdscr: main window
+    :param current_board: Board object
+    :return: None
+    """
     clear_screen(stdscr)
 
     curses.curs_set(0)
@@ -154,7 +168,14 @@ def replay(stdscr: curses.wrapper, current_board: Board):
     curses.curs_set(1)
 
 
-def get_user_input(stdscr: curses.wrapper, n_characters: int = None, visible: bool = True):
+def get_user_input(stdscr: curses.wrapper, n_characters: int = None, visible: bool = True) -> str:
+    """
+    Retrieving user input
+    :param stdscr: main window
+    :param n_characters: number of characters to be read
+    :param visible: visibility of prompt
+    :return: str - user input key
+    """
     if n_characters is None:
         n_characters = 1
 
@@ -169,18 +190,18 @@ def get_user_input(stdscr: curses.wrapper, n_characters: int = None, visible: bo
         print_input_error_text(stdscr)
 
 
-def save_game(board):
+def save_game(board) -> None:
     """
-    Save board
-    :param board:
+    Save board into json save file
+    :param board: Board object
     :return: None
     """
     board.to_json()
 
 
-def load_game():
+def load_game() -> Board:
     """
-    Load board
+    Load board from json save file
     :return: Board: loaded Sudoku board
     """
     board = Board(4, True)

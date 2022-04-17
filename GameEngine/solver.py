@@ -3,11 +3,11 @@ Solver
 """
 
 
-def find_empty_square(current_board: []) -> tuple[int, int]:
+def find_empty_square(current_board: []):
     """
     Find the closest empty square on board
-    :param current_board:
-    :return:
+    :param current_board: current sudoku board state
+    :return: tuple, either (int,int) or (bool,bool)
     """
     for r in range(9):
         for c in range(9):

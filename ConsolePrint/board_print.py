@@ -25,9 +25,9 @@ board_frame_bottom = [
 def print_board_state(stdscr: curses.wrapper, board: Board, n: int = None):
     """
     Print board state to console
-    :param n:
     :param stdscr: Main window
     :param board: Sudoku board
+    :param n: Board state number
     """
     if n is None:
         n = -1
@@ -69,11 +69,12 @@ def print_board_state(stdscr: curses.wrapper, board: Board, n: int = None):
     for line in board_frame_bottom:
         add_line(stdscr, line)
 
+
 def add_y_symbol(stdscr: curses.wrapper, position: str) -> None:
     """
     Add y symbol on the side
-    :param stdscr:
-    :param position:
+    :param stdscr: main window
+    :param position: left or right side
     :return:
     """
     if position == 'left':
@@ -89,8 +90,8 @@ def add_y_symbol(stdscr: curses.wrapper, position: str) -> None:
 def add_coordinates(stdscr: curses.wrapper, y: int) -> None:
     """
     Add y-coordinates on the side
-    :param stdscr:
-    :param y:
+    :param stdscr: main window
+    :param y: y-coordinate
     :return:
     """
     add_char(stdscr, "┃", is_coordinate=True)
@@ -107,23 +108,23 @@ def add_char(stdscr: curses.wrapper,
              char: str,
              is_immutable: bool = False,
              is_coordinate: bool = False,
-             coordinate: int = 1):
+             coordinate: int = 1) -> None:
     """
     Add individual character to console
-    :param coordinate:
-    :param is_immutable:
-    :param is_coordinate:
-    :param char:
-    :param stdscr:
-    :return:
+    :param stdscr: main window
+    :param char: character to be printed
+    :param is_immutable: if square is immutable
+    :param is_coordinate: if char is a coordinate
+    :param coordinate: x or y coordinate
+    :return: None
     """
     y, x = curses.getsyx()
 
-    def add_immutable_square(digit_char: str):
+    def add_immutable_square(digit_char: str) -> None:
         """
         Add immutable square digit to console
-        :param digit_char:
-        :return:
+        :param digit_char: digit to be printed
+        :return: None
         """
         stdscr.addstr(
             y,
@@ -132,11 +133,11 @@ def add_char(stdscr: curses.wrapper,
             curses.A_BOLD
         )
 
-    def add_mutable_square(digit_char: str):
+    def add_mutable_square(digit_char: str) -> None:
         """
         Add mutable square digit to console
-        :param digit_char:
-        :return:
+        :param digit_char: digit char to be printed
+        :return: None
         """
         stdscr.addstr(
             y,
@@ -145,11 +146,11 @@ def add_char(stdscr: curses.wrapper,
             curses.color_pair((coordinate + 70 + 140)) | curses.A_BOLD
         )
 
-    def add_coordinate_symbol(coordinate_char: str):
+    def add_coordinate_symbol(coordinate_char: str) -> None:
         """
         Add coordinate character to console
-        :param coordinate_char:
-        :return:
+        :param coordinate_char: coordinate to be printed
+        :return: None
         """
         stdscr.addstr(
             y,
@@ -163,18 +164,18 @@ def add_char(stdscr: curses.wrapper,
         add_immutable_square(char)
     elif is_coordinate:
         add_coordinate_symbol(char)
-    elif char == '0':   # Empty mutable squares
+    elif char == '0':  # Empty mutable squares
         add_mutable_square("⯀")
     else:
-        add_mutable_square(char) # Non-empty mutable squares
+        add_mutable_square(char)  # Non-empty mutable squares
 
 
 def add_line(stdscr: curses.wrapper, line: str) -> None:
     """
-    Add string to console (centered)
-    :param stdscr:
-    :param line:
-    :return:
+    Print str to main window (centered)
+    :param stdscr: main window
+    :param line: str
+    :return: None
     """
     y, x = curses.getsyx()
     stdscr.addstr(

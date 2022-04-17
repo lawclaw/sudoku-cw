@@ -1,6 +1,6 @@
 import curses
 
-from ConsolePrint.ui import clear_screen, str_list_to_screen
+from ConsolePrint.ui import str_list_to_screen
 
 victory_text = [
     "👍You solved the puzzle!👍",
@@ -11,16 +11,21 @@ victory_text = [
 ]
 
 
-def print_victory(stdscr: curses.wrapper):
+def print_victory(stdscr: curses.wrapper) -> None:
     """
     Prints victory
-    :param stdscr:
-    :return:
+    :param stdscr: main window
+    :return: None
     """
     str_list_to_screen(victory_text, stdscr)
 
 
-def print_game_loop_text(stdscr: curses.wrapper):
+def print_input_prompt(stdscr: curses.wrapper) -> None:
+    """
+    Prints the prompt for user input
+    :param stdscr: main window
+    :return: None
+    """
     y, x = curses.getsyx()
     prompt = "Input: "
     stdscr.addstr(

@@ -1,20 +1,15 @@
 import curses
-import datetime
-import time
-import threading
-
-from ConsolePrint.ui import move_cursor
 from GameEngine.board import Board
 
 sidebar_text = [
     "┏━━━┳━━━━━━━━━━┳━━━┓",
     "┃ ◆ ┃ Controls ┃ ◆ ┃",
     "┣━━━┻━━━━━━━━━━┻━━━┫",
-    "┃  Move:x,y,value  ┃",
+    "┃ Move: x,y,value  ┃",
     "┣━━━━━━━━━━━━━━━━━━┫",
-    "┃    Undo: U,u     ┃",
+    "┃   Undo: U / u    ┃",
     "┣━━━━━━━━━━━━━━━━━━┫",
-    "┃    Redo: R,r     ┃",
+    "┃   Redo: R / r    ┃",
     "┣━━━━━━━━━━━━━━━━━━┫",
     "┃    Quit: Q,q     ┃",
     "┗━━━━━━━━━━━━━━━━━━┛"
@@ -23,8 +18,13 @@ sidebar_text = [
 
 number_of_player_actions = 0
 
-# Problem, not responsive
-def print_sidebar(stdscr: curses.wrapper):
+
+def print_sidebar(stdscr: curses.wrapper) -> None:
+    """
+    Prints control sidebar
+    :param stdscr: main window
+    :return: None
+    """
     uly, ulx = curses.LINES // 2 - 9, curses.COLS // 2 - 40
 
     for i, list_line in enumerate(sidebar_text):
@@ -37,7 +37,13 @@ def print_sidebar(stdscr: curses.wrapper):
     stdscr.refresh()
 
 
-def score(stdscr: curses.wrapper, board: Board):
+def print_scoreboard(stdscr: curses.wrapper, board: Board) -> None:
+    """
+    Prints scoreboard sidebar
+    :param stdscr: main window
+    :param board: current Sudoku board state
+    :return: None
+    """
     uly, ulx = curses.LINES // 2 - 8, curses.COLS // 2 + 20
 
     scoreboard_text = [
@@ -68,6 +74,12 @@ def score(stdscr: curses.wrapper, board: Board):
 
 
 def add_score_line(line: str, value: str) -> str:
+    """
+    String formatting for scoreboard sidebar
+    :param line: score text
+    :param value: score
+    :return: str - formatted score
+    """
     base_str = f"{line}{value}".center(20)
     return_str = '┃' + base_str[1:-1] + '┃'
     return return_str
