@@ -73,7 +73,7 @@ def str_list_to_screen(text_list, stdscr) -> None:
             curses.LINES // 3 + i,
             curses.COLS // 2 - ((len(list_line) + 1) // 2),
             f"{list_line}",
-            curses.color_pair(i + 2) | curses.A_BOLD
+            curses.color_pair(i + 210) | curses.A_BOLD
         )
     stdscr.refresh()
 

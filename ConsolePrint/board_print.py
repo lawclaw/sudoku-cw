@@ -143,7 +143,7 @@ def add_char(stdscr: curses.wrapper,
             y,
             x,
             digit_char,
-            curses.color_pair((coordinate + 70 + 140)) | curses.A_BOLD
+            curses.color_pair((coordinate + 210)) | curses.A_BOLD
         )
 
     def add_coordinate_symbol(coordinate_char: str) -> None:

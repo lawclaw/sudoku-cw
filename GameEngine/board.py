@@ -13,7 +13,6 @@ class Board:
         Constructor: Handles generation of board
         :param difficulty: game difficulty
         """
-        # TODO: Implement stack using deque
         self.board_states = []  # List of board states
         self.undone_states = []  # List of all undone player moves
         self.solved_state = []  # Solved state
@@ -60,7 +59,7 @@ class Board:
 
         removals = 0
         # DEBUG
-        removals = max_removals - 3
+        #removals = max_removals - 3
 
         while removals < max_removals:
             y = random.randint(0, self._size - 1)
