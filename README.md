@@ -1,4 +1,4 @@
-# sudoku-cw
+# crsdoku
 Coursework for ADS module
 
 ## Running (Recommended)
@@ -25,11 +25,11 @@ python3 main.py
 ### How to build application
 Linux
 ```shell
-pyinstaller main.py -F
+pyinstaller main.py -F -n crsdoku
 ```
 Windows
 ```shell
-python -m PyInstaller --icon=icon.ico -F
+python -m PyInstaller main.py -F -n crsdoku -i icon.ico
 ```
 ### How to run built executable
 1. Change directory to `dist`
