@@ -5,10 +5,10 @@ from ConsolePrint.ui import str_list_to_screen
 difficulty_text = [
     "(crs)doku²",
     "━━━━━━━━━━━━",
-    "▶ 1.    Easy",
-    "▶ 2.  Medium",
-    "▶ 3.    Hard",
-    "▶ Go back. Q",
+    "■ 1.    Easy",
+    "■ 2.  Medium",
+    "■ 3.    Hard",
+    "■ Go back. Q",
     "━━━━━━━━━━━━",
     "Enter:"
 ]
@@ -17,9 +17,9 @@ difficulty_text = [
 menu_text = [
     "(crs)doku²",
     "━━━━━━━━━━━━━━",
-    "▶ 1.  New game",
-    "▶ 2. Load game",
-    "▶      Quit. Q",
+    "■ 1.  New game",
+    "■ 2. Load game",
+    "■      Quit. Q",
     "━━━━━━━━━━━━━━",
     "Enter:"
 ]

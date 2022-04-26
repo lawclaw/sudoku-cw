@@ -17,7 +17,7 @@ def curses_prep() -> None:
     curses.start_color()
     curses.use_default_colors()
 
-    for i in range(0, curses.COLORS):
+    for i in range(0, 255):
         curses.init_pair(i + 1, i, -1)
 
 
@@ -73,7 +73,7 @@ def str_list_to_screen(text_list, stdscr) -> None:
             curses.LINES // 3 + i,
             curses.COLS // 2 - ((len(list_line) + 1) // 2),
             f"{list_line}",
-            curses.color_pair(i + 2) | curses.A_BOLD
+            curses.color_pair(30 + i) | curses.A_BOLD
         )
     stdscr.refresh()
 

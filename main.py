@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import curses
 import sys
-from curses import wrapper
+from curses import start_color, wrapper
 from GameEngine.game import Game
 
 

@@ -7,17 +7,17 @@ board_frame_top = [
     "",
     "",
     "",
-    "🆇",
+    "X",
     "┏━━━┳━━━━━━━━━━━━━━━━━━━┳━━━┓",
-    "┃ ◆ ┃ 0 1 2 3 4 5 6 7 8 ┃ ◆ ┃",
+    "┃ ■ ┃ 0 1 2 3 4 5 6 7 8 ┃ ■ ┃",
     "┣━━━╋━━━━━━━━━━━━━━━━━━━╋━━━┫"
 ]
 
 board_frame_bottom = [
     "┣━━━╋━━━━━━━━━━━━━━━━━━━╋━━━┫",
-    "┃ ◆ ┃ 0 1 2 3 4 5 6 7 8 ┃ ◆ ┃",
+    "┃ ■ ┃ 0 1 2 3 4 5 6 7 8 ┃ ■ ┃",
     "┗━━━┻━━━━━━━━━━━━━━━━━━━┻━━━┛",
-    "🆇",
+    "X",
     " "
 ]
 
@@ -79,11 +79,11 @@ def add_y_symbol(stdscr: curses.wrapper, position: str) -> None:
     """
     if position == 'left':
         move_cursor(stdscr, y=None, x=-9)
-        add_char(stdscr, char='🆈', is_coordinate=True)
+        add_char(stdscr, char='Y', is_coordinate=True)
         move_cursor(stdscr, y=None, x=9)
     elif position == 'right':
         move_cursor(stdscr, y=None, x=6)
-        add_char(stdscr, char='🆈', is_coordinate=True)
+        add_char(stdscr, char='Y', is_coordinate=True)
         move_cursor(stdscr, y=None, x=-6)
 
 
@@ -165,7 +165,7 @@ def add_char(stdscr: curses.wrapper,
     elif is_coordinate:
         add_coordinate_symbol(char)
     elif char == '0':  # Empty mutable squares
-        add_mutable_square("⯀")
+        add_mutable_square("■")
     else:
         add_mutable_square(char)  # Non-empty mutable squares
 

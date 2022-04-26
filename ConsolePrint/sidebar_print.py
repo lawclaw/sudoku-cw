@@ -3,7 +3,7 @@ from GameEngine.board import Board
 
 sidebar_text = [
     "┏━━━┳━━━━━━━━━━┳━━━┓",
-    "┃ ◆ ┃ Controls ┃ ◆ ┃",
+    "┃ ■ ┃ Controls ┃ ■ ┃",
     "┣━━━┻━━━━━━━━━━┻━━━┫",
     "┃ Move: x,y,value  ┃",
     "┣━━━━━━━━━━━━━━━━━━┫",
@@ -48,13 +48,13 @@ def print_scoreboard(stdscr: curses.wrapper, board: Board) -> None:
 
     scoreboard_text = [
         "┏━━━┳━━━━━━━━━━┳━━━┓",
-        "┃ ◆ ┃  Score   ┃ ◆ ┃",
+        "┃ ■ ┃  Score   ┃ ■ ┃",
         "┣━━━┻━━━━━━━━━━┻━━━┫",
         "",
         "┣━━━━━━━━━━━━━━━━━━┫",
         "",
         "┣━━━┳━━━━━━━━━━┳━━━┫",
-        "┃ ◆ ┣━━━━━━━━━━┫ ◆ ┃",
+        "┃ ■ ┣━━━━━━━━━━┫ ■ ┃",
         "┗━━━┻━━━━━━━━━━┻━━━┛"
     ]
 
