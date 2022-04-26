@@ -60,7 +60,7 @@ class Board:
 
         removals = 0
         # DEBUG
-        # removals = max_removals - 1
+        removals = max_removals - 3
 
         while removals < max_removals:
             y = random.randint(0, self._size - 1)

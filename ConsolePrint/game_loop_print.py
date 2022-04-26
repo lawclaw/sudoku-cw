@@ -3,11 +3,14 @@ import curses
 from ConsolePrint.ui import str_list_to_screen
 
 victory_text = [
-    "👍You solved the puzzle!👍",
-    "Enter 1 to get a replay of game",
-    "Enter 2 to replay the game",
-    "Enter 3 to save the game",
-    "Press Enter to return"
+    "Solved puzzle!",
+    "━━━━━━━━━━━━━━━━━━",
+    "▶ 1.  Watch replay",
+    "▶ 2.  Replay game ",
+    "▶ 3.  Save game   ",
+    "▶ Enter to return ",
+    "━━━━━━━━━━━━━━━━━━",
+    "Enter:"
 ]
 
 

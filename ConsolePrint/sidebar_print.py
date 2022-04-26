@@ -63,7 +63,7 @@ def print_scoreboard(stdscr: curses.wrapper, board: Board) -> None:
 
     for i, list_line in enumerate(scoreboard_text):
         if not list_line:
-            list_line = add_score_line("PLACEHOLDER:", 10)
+            list_line = add_score_line("PLACEHOLDER:", str(10))
         stdscr.addstr(
             uly + i,
             ulx,
