@@ -34,5 +34,5 @@ python3 main.py
 1. Change directory to `dist`
 2. Give suitable privileges to executale
 3. Run executable  
-		- Linux: ``./main``
+		- Linux: `./main` <br>
 		- Run .exe file
