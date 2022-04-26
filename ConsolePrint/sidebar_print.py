@@ -32,7 +32,7 @@ def print_sidebar(stdscr: curses.wrapper) -> None:
             uly + i,
             ulx,
             f"{list_line}",
-            curses.color_pair(75)
+            curses.color_pair(210)
         )
     stdscr.refresh()
 
@@ -68,7 +68,7 @@ def print_scoreboard(stdscr: curses.wrapper, board: Board) -> None:
             uly + i,
             ulx,
             f"{list_line}",
-            curses.color_pair(75)
+            curses.color_pair(210)
         )
     stdscr.refresh()
 
