@@ -33,6 +33,6 @@ python3 main.py
 ## How to run built executable
 1. Change directory to `dist`
 2. Give suitable privileges to executale
-3. Run executable 
+3. Run executable  
 		- Linux: ``./main``
 		- Run .exe file
