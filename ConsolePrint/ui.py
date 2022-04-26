@@ -17,7 +17,7 @@ def curses_prep() -> None:
     curses.start_color()
     curses.use_default_colors()
 
-    for i in range(0, curses.COLORS):
+    for i in range(0, 255):
         curses.init_pair(i + 1, i, -1)
 
 
