@@ -204,5 +204,5 @@ def load_game() -> Board:
     Load board from json save file
     :return: Board: loaded Sudoku board
     """
-    board = Board(4, True)
+    board = Board(-1, True)
     return board

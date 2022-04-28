@@ -1,5 +1,7 @@
 import json
 import random
+from os.path import exists
+
 from GameEngine import solver
 from GameEngine.immutable_square_exception import ImmutableSquareException
 from copy import deepcopy
@@ -21,7 +23,8 @@ class Board:
         if load is None:
             self.generate_new_board(difficulty)
         else:  # If load option is selected
-            self.from_json()
+            if not self.from_json():
+                self.generate_new_board(difficulty)
 
     def generate_new_board(self, difficulty: int) -> None:
         """
@@ -154,16 +157,19 @@ class Board:
         with open('save_file.json', 'w') as file:
             file.write(json.dumps(self, default=lambda o: o.__dict__, indent=4))
 
-    def from_json(self) -> None:
+    def from_json(self) -> bool:
         """
         Read from JSON file
-        :return: None
+        :return: bool: if board was successfully loaded
         """
-        with open('save_file.json', 'r') as file:
-            attributes = json.loads(file.read())
-        self.board_states = attributes['board_states']
-        self.undone_states = attributes['undone_states']
-        self.solved_state = attributes['solved_state']
+        if exists('save_file.json'):
+            with open('save_file.json', 'r') as file:
+                attributes = json.loads(file.read())
+            self.board_states = attributes['board_states']
+            self.undone_states = attributes['undone_states']
+            self.solved_state = attributes['solved_state']
+            return True
+        return False
 
     @property
     def size(self):
