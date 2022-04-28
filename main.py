@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!python3
 import curses
 import sys
 from curses import wrapper
@@ -29,5 +29,4 @@ def main(stdscr):
 
 
 if __name__ == '__main__':
-    # wrapper(color_check)
     wrapper(main)
